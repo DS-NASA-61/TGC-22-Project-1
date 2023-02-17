@@ -1,0 +1,30 @@
+#map {
+    height: 100vh;
+    position: relative;
+}
+
+#hawkerSearch{
+    position:absolute;
+    margin-top: 10px;
+    margin-left: 50px;
+    z-index: 2000;
+}
+#hawkerName{
+    font-size: x-large;
+}
+#hawkersearchBtn{
+    font-size: x-large;
+}
+
+#stallFoodSearch{
+    position:absolute;
+    margin-top: 50px;
+    margin-left: 50px;
+    z-index: 2000;
+}
+#stallFood{
+    font-size: x-large;
+}
+#stallFoodsearchBtn{
+    font-size: x-large;
+}
