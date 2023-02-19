@@ -2,9 +2,6 @@ const Singapore = [1.3521, 103.8198]; //leaflet expect lat lng in array, which w
 const map = createMap(Singapore);
 
 function main() {
-  let foodSearchResultLayer = L.layerGroup();
-  foodSearchResultLayer.addTo(map);
-
   //geojson
   async function loadHawkerGeoJson() {
     let hawkerGeoJson = await axios.get("hawker-centres-geojson.geojson");
@@ -15,9 +12,6 @@ function main() {
     //The onEachFeature option is a function that gets called on each feature before adding it to a GeoJSON layer.
     //A common reason to use this option is to attach a popup to features when they are clicked.
     //the for loop is inside the GeoJson
-
-    let hawkerLayer = L.geoJson(hawkerGeoJson.data).addTo(map);
-
     function onEachFeature(feature, layer) {
       // let el = document.createElement(feature.properties.Description);
       // above wrong, should be:
@@ -33,11 +27,31 @@ function main() {
       layer.bindPopup(`<h2>${name}</h2><h4>${origin}</h4>`);
     }
 
+    // using the pointToLayer option to create a CircleMarker as per "Using GeoJSON with Leaflet" Doc, and reference solution "https://gist.github.com/geog4046instructor/80ee78db60862ede74eacba220809b64"
+    function createCustomIcon(feature, latlng) {
+      let myIcon = L.icon({
+        iconUrl: "img/food-stall.png",
+        shadowUrl: "my-icon.png",
+        iconSize: [35, 35], // width and height of the image in pixels
+        shadowSize: [35, 20], // width, height of optional shadow image
+        iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
+        shadowAnchor: [12, 6], // anchor point of the shadow. should be offset
+        popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
+      });
+      return L.marker(latlng, { icon: myIcon });
+    }
+
+    //loading geoJson
     L.geoJSON(hawkerGeoJson.data, {
       onEachFeature: onEachFeature,
+      pointToLayer: createCustomIcon,
     }).addTo(map);
   }
   loadHawkerGeoJson();
+
+  // var markers = L.markerClusterGroup();
+  markers.addLayer(L.marker(getRandomLatLng(map)));
+  map.addLayer(markers);
 
   document
     .querySelector("#hawkersearchBtn")
@@ -47,33 +61,3 @@ function main() {
     });
 }
 main();
-
-// //geojson
-// async function loadHawkerGeoJson() {
-//   let hawkerGeoJson = await axios.get("hawker-centres-geojson.geojson");
-//   console.log(hawkerGeoJson.data);
-
-//   //add geojson layer
-//   //L.geoJson has two parameters, first is GeoJson data, second is options: https://leafletjs.com/examples/geojson/
-//   //The onEachFeature option is a function that gets called on each feature before adding it to a GeoJSON layer.
-//   //A common reason to use this option is to attach a popup to features when they are clicked.
-//   //the for loop is inside the GeoJson
-
-//   let hawkerLayer = L.geoJson(hawkerGeoJson.data).addTo(map);
-
-//   function onEachFeature(feature, layer) {
-//     // let el = document.createElement(feature.properties.Description);
-//     // above wrong, should be:
-//     let el = document.createElement("el");
-//     //queryselecterAll returns array
-//     el.innerHTML = feature.properties.Description;
-//     let allTd = el.querySelectorAll("td");
-
-//     //please dont forget the innerHTML!!!!!
-//     let origin = allTd[2].innerHTML;
-//     let name = allTd[19].innerHTML;
-
-//     layer.bindPopup(`<h2>${name}</h2><h4>${origin}</h4>`);
-//   }
-// }
-// loadHawkerGeoJson();
