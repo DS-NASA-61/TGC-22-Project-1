@@ -1,6 +1,3 @@
-//set up global variables
-//leaflet expect lat lng in array
-
 function createMap(latLng) {
   const map = L.map("map").setView(latLng, 12.5); //no need # even though it is an address
 

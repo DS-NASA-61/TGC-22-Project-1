@@ -1,3 +1,79 @@
+body{
+    background-color: #121212;
+    padding: 0;
+    margin: 1rem;
+}
+
+/* landing page background */
+.photo-grid{
+    position: relative;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(4,minmax(auto,3fr));
+    grid-template-rows: 50vh 50vh;
+    /* grid-auto-rows: 100vh; */
+}
+.card{
+    display: flex;
+    justify-content: column;
+    flex-direction: column;
+    align-items: center;
+    background-size:cover;
+}
+.card-tall{
+    /* start / end means start whereever and span two rows and end whereever */
+    grid-row: span 2 / auto;
+}
+/* .card-small-2{
+    grid-column: span 2 / auto;
+} */
+.card-small-3{
+    grid-column: span 1 / auto;
+    grid-row: span 2 / auto;
+}
+.search-bar{
+    position: absolute;
+    z-index: 2000;
+    top: 50%;
+}
+.hero-caption{
+    font-size: 30px;
+    font-family: sans-serif;
+    font-weight: 700;
+    color: #fff; 
+}
+.hero-caption h1{
+    font-size: 45px;
+    line-height: initial ;
+}
+.search-form{
+    font-size: 35px;
+    width: 100%;
+    position: relative;
+}
+.search-form input{
+    width: 60%;
+    padding: 0 30px;
+    border-radius: 50px;
+    border: none;
+    font-weight: 600;
+    font-size: 25px;
+    position: relative;
+    color: #484646;
+    height: 70px;
+}
+.search-form button{
+    position: absolute;
+    right: -50px;
+    height: 50px;
+    border: none;
+    color: #1c1616;
+    border-radius: 50px;
+    /* width: 80px; */
+}
+
+
+/* map */
 #map {
     height: 100vh;
     position: relative;

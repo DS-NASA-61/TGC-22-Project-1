@@ -1,4 +1,5 @@
 const FSQ_API_Key = "fsq386YoghWjLs+O6HtXfUIABeRg10pffdXqrOsWxWvyxQA=";
+const ONEMAP_API_URL = "https://developers.onemap.sg/";
 
 //get fsq API
 async function loadData(lat, lng, query) {
@@ -26,4 +27,12 @@ async function loadHawkerData() {
   let jsonHawkerData = await csv().fromString(csvHawkerData.data);
   console.log(jsonHawkerData);
   return jsonHawkerData;
+}
+
+//get OneMap API
+async function getAddress(searchQuery) {
+  let address = await axios.get(
+    `https://developers.onemap.sg/commonapi/search?searchVal=${searchQuery}&returnGeom=Y&getAddrDetails=Y`
+  );
+  console.log(address.data);
 }
