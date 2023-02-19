@@ -27,18 +27,21 @@ function main() {
       layer.bindPopup(`<h2>${name}</h2><h4>${origin}</h4>`);
     }
 
+    //initialize markers for marker clustering
+    let markers = L.markerClusterGroup();
+
     // using the pointToLayer option to create a CircleMarker as per "Using GeoJSON with Leaflet" Doc, and reference solution "https://gist.github.com/geog4046instructor/80ee78db60862ede74eacba220809b64"
     function createCustomIcon(feature, latlng) {
       let myIcon = L.icon({
         iconUrl: "img/food-stall.png",
         shadowUrl: "my-icon.png",
-        iconSize: [35, 35], // width and height of the image in pixels
+        iconSize: [55, 55], // width and height of the image in pixels
         shadowSize: [35, 20], // width, height of optional shadow image
         iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
         shadowAnchor: [12, 6], // anchor point of the shadow. should be offset
         popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
       });
-      return L.marker(latlng, { icon: myIcon });
+      return markers.addLayer(L.marker(latlng, { icon: myIcon }));
     }
 
     //loading geoJson
