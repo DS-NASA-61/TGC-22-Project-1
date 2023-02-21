@@ -1,5 +1,7 @@
 const Singapore = [1.3521, 103.8198]; //leaflet expect lat lng in array, which will be used in the createMap function
 const map = createMap(Singapore);
+let searchResultLayer = L.layerGroup();
+searchResultLayer.addTo(map);
 
 function main() {
   //geojson
@@ -34,7 +36,6 @@ function main() {
     function createCustomIcon(feature, latlng) {
       let myIcon = L.icon({
         iconUrl: "img/food-stall.png",
-        shadowUrl: "my-icon.png",
         iconSize: [55, 55], // width and height of the image in pixels
         shadowSize: [35, 20], // width, height of optional shadow image
         iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
@@ -52,15 +53,23 @@ function main() {
   }
   loadHawkerGeoJson();
 
-  // var markers = L.markerClusterGroup();
-  markers.addLayer(L.marker(getRandomLatLng(map)));
-  map.addLayer(markers);
+  //user search from home page
+  let userSearch = document.querySelector("#user-search");
+  let searchButton = document.querySelector("#search-button");
 
-  document
-    .querySelector("#hawkersearchBtn")
-    .addEventListener("click", function () {
-      let foodSearchValue = document.querySelector("#hawkerName").value;
-      //   let foodCoordinates =
-    });
+  searchButton.addEventListener("click", async function () {
+    let response = await getAddress(userSearch.value);
+    for (let eachResponse of response.data.results) {
+      console.log(eachResponse);
+
+      //create searchResult marker and display on the map
+      let coordinate = [eachResponse.LATITUDE, eachResponse.LONGITUDE];
+      let marker = L.marker(coordinate, { icon: searchResultIcon }).addTo(
+        searchResultLayer
+      );
+      searchResultLayer.clearLayers();
+      map.flyTo(coordinate, 15);
+    }
+  });
 }
 main();

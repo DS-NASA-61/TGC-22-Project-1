@@ -30,9 +30,10 @@ async function loadHawkerData() {
 }
 
 //get OneMap API
-async function getAddress(searchQuery) {
-  let address = await axios.get(
-    `https://developers.onemap.sg/commonapi/search?searchVal=${searchQuery}&returnGeom=Y&getAddrDetails=Y`
+async function getAddress(userSearch) {
+  let response = await axios.get(
+    `https://developers.onemap.sg/commonapi/search?searchVal=${userSearch}&returnGeom=Y&getAddrDetails=Y`
   );
-  console.log(address.data);
+  console.log(response.data);
+  return response;
 }
