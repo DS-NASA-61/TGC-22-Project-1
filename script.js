@@ -118,6 +118,7 @@ function main() {
 
         //make the itme clickable
         resultElement.addEventListener("click", function () {
+          document.querySelector("#map-container").style.zIndex = "6000";
           document.location.hash = "#map";
           map.flyTo(coordinate, 18);
         });

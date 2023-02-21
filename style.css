@@ -7,16 +7,17 @@ body{
 /* #landing-container{
     position:fixed;
     z-index: 400000;
-}
+} */
 
 #landing-page{
-    position: fixed;
-    z-index: 400000;
-} */
+    position: absolute;
+} 
 
 /* landing page background */
 .photo-grid{
-    position: relative;
+    position: fixed;
+    width: 100%;
+    z-index: 4000;
     display: grid;
     gap: 0rem;
     grid-template-columns: repeat(4,minmax(auto,3fr));
@@ -43,8 +44,8 @@ body{
     grid-row: span 2 / auto;
 }
 .search-bar{
-    position: absolute;
-    z-index: 2000;
+    position: fixed;
+    z-index: 5000;
     top: 50%;
 }
 .hero-caption{
