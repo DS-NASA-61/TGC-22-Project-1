@@ -1,3 +1,4 @@
+//latlng is arry as required by leaflet
 function createMap(latLng) {
   const map = L.map("map").setView(latLng, 12.5); //no need # even though it is an address
 

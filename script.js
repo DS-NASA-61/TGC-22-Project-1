@@ -54,22 +54,32 @@ function main() {
   loadHawkerGeoJson();
 
   //user search from home page
-  let userSearch = document.querySelector("#user-search");
-  let searchButton = document.querySelector("#search-button");
+  document
+    .querySelector("#search-button")
+    .addEventListener("click", async function () {
+      let searchValue = document.querySelector("#user-search").value;
+      let searchResults = await getAddress(searchValue);
 
-  searchButton.addEventListener("click", async function () {
-    let response = await getAddress(userSearch.value);
-    for (let eachResponse of response.data.results) {
-      console.log(eachResponse);
+      //clear layer before search
+      searchResultLayer.clearLayers();
+
+      for (let result of searchResults.results) {
+        let coordinate = [result.LATITUDE, result.LONGITUDE];
+        let marker = L.marker(coordinate).addTo(searchResultLayer);
+        marker.bindPopup(`<h4>${result.SEARCHVAL}</h4>
+                          <p>${result.ADDRESS}</p>`);
+      }
+
+      // for (let eachResult of searchResult.data.results) {
+      //   console.log(eachResult);
 
       //create searchResult marker and display on the map
-      let coordinate = [eachResponse.LATITUDE, eachResponse.LONGITUDE];
-      let marker = L.marker(coordinate, { icon: searchResultIcon }).addTo(
-        searchResultLayer
-      );
-      searchResultLayer.clearLayers();
-      map.flyTo(coordinate, 15);
-    }
-  });
+      // let coordinate = [eachResult.LATITUDE, eachResult.LONGITUDE];
+      // let marker = L.marker(coordinate, { icon: searchResultIcon }).addTo(
+      //   searchResultLayer
+      // );
+      // searchResultLayer.clearLayers();
+      // map.flyTo(coordinate, 15);
+    });
 }
 main();
