@@ -15,8 +15,6 @@ function main() {
     //A common reason to use this option is to attach a popup to features when they are clicked.
     //the for loop is inside the GeoJson
     function onEachFeature(feature, layer) {
-      // let el = document.createElement(feature.properties.Description);
-      // above wrong, should be:
       let el = document.createElement("el");
       //queryselecterAll returns array
       el.innerHTML = feature.properties.Description;
@@ -26,7 +24,9 @@ function main() {
       let origin = allTd[2].innerHTML;
       let name = allTd[19].innerHTML;
 
-      layer.bindPopup(`<h2>${name}</h2><h4>${origin}</h4>`);
+      layer.bindPopup(`<h2>${name}</h2>
+                        <h4>${origin}</h4>
+                        <button type="button" class="btn btn-primary stall-open-button">Click to see stalls</button>`);
     }
 
     //initialize markers for marker clustering
@@ -36,7 +36,7 @@ function main() {
     function createCustomIcon(feature, latlng) {
       let myIcon = L.icon({
         iconUrl: "img/food-stall.png",
-        iconSize: [55, 55], // width and height of the image in pixels
+        iconSize: [65, 65], // width and height of the image in pixels
         shadowSize: [35, 20], // width, height of optional shadow image
         iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
         shadowAnchor: [12, 6], // anchor point of the shadow. should be offset
@@ -60,31 +60,34 @@ function main() {
       let searchValue = document.querySelector("#user-search").value;
       let searchResults = await getAddress(searchValue);
 
-      //clear layer before search
-      searchResultLayer.clearLayers();
+      // //clear layer before search
+      // searchResultLayer.clearLayers();
 
-      //create marker and add to searchResultLayer
       for (let result of searchResults.results) {
+        //create marker and add to searchResultLayer
         let coordinate = [result.LATITUDE, result.LONGITUDE];
         let marker = L.marker(coordinate).addTo(searchResultLayer);
         marker.bindPopup(`<h4>${result.SEARCHVAL}</h4>
                           <p>${result.ADDRESS}</p>`);
+
+        //create search result list
+        let resultElement = document.createElement(`div`);
+        resultElement.classList.add("search-item");
+        resultElement.innerText = result.ADDRESS;
+        document
+          .querySelector("#search-result-list")
+          .appendChild(resultElement);
+
+        //make the itme clickable
+        resultElement.addEventListener("click", function () {
+          document.location.hash = "#map";
+          map.flyTo(coordinate, 16);
+        });
       }
-
-      //create search result drop down in a div
-      let resultElement = document.createElement(`div`);
-      resultElement.innerText = result.ADDRESS;
-
-      // for (let eachResult of searchResult.data.results) {
-      //   console.log(eachResult);
-
-      //create searchResult marker and display on the map
-      // let coordinate = [eachResult.LATITUDE, eachResult.LONGITUDE];
-      // let marker = L.marker(coordinate, { icon: searchResultIcon }).addTo(
-      //   searchResultLayer
-      // );
-      // searchResultLayer.clearLayers();
-      // map.flyTo(coordinate, 15);
     });
 }
-main();
+
+//adding DOMContentLoaded event before calling main()
+window.addEventListener("DOMContentLoaded", function () {
+  main();
+});

@@ -1,5 +1,4 @@
 const FSQ_API_Key = "fsq386YoghWjLs+O6HtXfUIABeRg10pffdXqrOsWxWvyxQA=";
-const ONEMAP_API_URL = "https://developers.onemap.sg/";
 
 //get fsq API
 async function loadData(lat, lng, query) {
@@ -14,7 +13,8 @@ async function loadData(lat, lng, query) {
         query: query,
         ll: lat + "," + lng,
         limit: 50,
-        radius: 20000,
+        radius: 200, //preset as 200m to fix it within the premises of the hawker center
+        categories: "Dining and Drinking", //preset it as for food related only
       },
     }
   );

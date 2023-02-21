@@ -56,7 +56,7 @@ body{
     line-height: initial ;
 }
 .search-form{
-    font-size: 35px;
+    font-size: 25px;
     width: 100%;
     position: relative;
 }
@@ -65,7 +65,7 @@ body{
     padding: 0 30px;
     border-radius: 10px;
     border: none;
-    font-weight: 600;
+    font-weight: 300;
     font-size: 25px;
     position: relative;
     color: #484646;
@@ -80,19 +80,25 @@ body{
     background-color: #fff;
     border-radius: 10px;
 }
+.search-item{
+    margin: 5px;
+}
 
 
 /* map */
+#map-container{
+    position: relative;
+}
+
 #map {
     height: 100vh;
-    position: relative;
 }
 
 #hawkerSearch{
     position:absolute;
-    margin-top: 10px;
-    margin-left: 50px;
-    z-index: 2000;
+    top: 10px;
+    left: 50px;
+    z-index: 1000;
 }
 #hawkerName{
     font-size: x-large;
