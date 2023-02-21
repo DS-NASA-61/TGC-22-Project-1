@@ -63,12 +63,17 @@ function main() {
       //clear layer before search
       searchResultLayer.clearLayers();
 
+      //create marker and add to searchResultLayer
       for (let result of searchResults.results) {
         let coordinate = [result.LATITUDE, result.LONGITUDE];
         let marker = L.marker(coordinate).addTo(searchResultLayer);
         marker.bindPopup(`<h4>${result.SEARCHVAL}</h4>
                           <p>${result.ADDRESS}</p>`);
       }
+
+      //create search result drop down in a div
+      let resultElement = document.createElement(`div`);
+      resultElement.innerText = result.ADDRESS;
 
       // for (let eachResult of searchResult.data.results) {
       //   console.log(eachResult);
