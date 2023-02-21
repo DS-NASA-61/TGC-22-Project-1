@@ -15,7 +15,7 @@ function main() {
     //A common reason to use this option is to attach a popup to features when they are clicked.
     //the for loop is inside the GeoJson
     function onEachFeature(feature, layer) {
-      let el = document.createElement("el");
+      let el = document.createElement("div");
       //queryselecterAll returns array
       el.innerHTML = feature.properties.Description;
       let allTd = el.querySelectorAll("td");
@@ -24,13 +24,51 @@ function main() {
       let origin = allTd[2].innerHTML;
       let name = allTd[19].innerHTML;
 
-      layer.bindPopup(`<h2>${name}</h2>
-                        <h4>${origin}</h4>
-                        <button type="button" class="btn btn-primary stall-open-button">Click to see stalls</button>`);
+      //not cleancode
+      // layer.bindPopup(`<h2>${name}</h2><h4>${origin}</h4>
+      // <button type="button" class="btn btn-primary" id="see-stalls-button">Show Stalls</button>
+      // <button type="button" class="btn btn-primary" id="random-choice">Don't know what to eat?</button>`);
+
+      //using js to create bindpopup html elements
+      const container = document.createElement("div");
+
+      const nameEl = document.createElement("h2");
+      nameEl.innerHTML = `${name}`;
+
+      const originEl = document.createElement("h4");
+      originEl.innerHTML = `${origin}`;
+
+      const stallsButton = document.createElement("button");
+      stallsButton.classList.add("btn", "btn-primary"); //Use the classList.add() method to add one or more classes to the element.
+      stallsButton.setAttribute("id", "see-stalls-button"); // Set id attribute on the element
+      stallsButton.innerText = "Show Stalls";
+
+      const choiceButton = document.createElement("button");
+      choiceButton.classList.add("btn", "btn-primary");
+      stallsButton.setAttribute("id", "random-choice"); // Set id attribute on the element
+      choiceButton.innerText = "Don't know what to eat?";
+
+      //create interaction when click "see stalls" button will show stalls
+      //call fsq API
+      //id created by createElement cannot be accessed by addeventlistener, must use the variable name
+      stallsButton.addEventListener("click", async function () {
+        console.log("hello");
+        let lat = feature.geometry.coordinates[1];
+        let lng = feature.geometry.coordinates[0];
+        let searchResults = await loadData(lat, lng);
+        console.log(searchResults);
+        // initialize stallMarkers for marker clustering
+        let stallMarkers = L.markerClusterGroup();
+        let marker = L.marker(coordinate).addTo(searchResultLayer);
+      });
+
+      container.append(nameEl, originEl, stallsButton, choiceButton);
+
+      layer.bindPopup(container);
     }
 
-    //initialize markers for marker clustering
-    let markers = L.markerClusterGroup();
+    //initialize hawkerCenterMarkers for marker clustering
+    let hawkerCentermarkers = L.markerClusterGroup();
 
     // using the pointToLayer option to create a CircleMarker as per "Using GeoJSON with Leaflet" Doc, and reference solution "https://gist.github.com/geog4046instructor/80ee78db60862ede74eacba220809b64"
     function createCustomIcon(feature, latlng) {
@@ -42,7 +80,7 @@ function main() {
         shadowAnchor: [12, 6], // anchor point of the shadow. should be offset
         popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
       });
-      return markers.addLayer(L.marker(latlng, { icon: myIcon }));
+      return hawkerCentermarkers.addLayer(L.marker(latlng, { icon: myIcon }));
     }
 
     //loading geoJson
@@ -53,7 +91,7 @@ function main() {
   }
   loadHawkerGeoJson();
 
-  //user search from home page
+  //user search from home page, using oneMap API
   document
     .querySelector("#search-button")
     .addEventListener("click", async function () {
@@ -81,7 +119,7 @@ function main() {
         //make the itme clickable
         resultElement.addEventListener("click", function () {
           document.location.hash = "#map";
-          map.flyTo(coordinate, 16);
+          map.flyTo(coordinate, 18);
         });
       }
     });

@@ -1,7 +1,7 @@
 const FSQ_API_Key = "fsq386YoghWjLs+O6HtXfUIABeRg10pffdXqrOsWxWvyxQA=";
 
 //get fsq API
-async function loadData(lat, lng, query) {
+async function loadData(lat, lng) {
   let response = await axios.get(
     "https://api.foursquare.com/v3/places/search",
     {
@@ -10,11 +10,11 @@ async function loadData(lat, lng, query) {
         Authorization: FSQ_API_Key,
       },
       params: {
-        query: query,
+        // query: query,
         ll: lat + "," + lng,
         limit: 50,
-        radius: 200, //preset as 200m to fix it within the premises of the hawker center
-        categories: "Dining and Drinking", //preset it as for food related only
+        radius: 300, //preset as 200m to fix it within the premises of the hawker center
+        categories: "13052,13053,13054", //preset it as for food related only
       },
     }
   );
