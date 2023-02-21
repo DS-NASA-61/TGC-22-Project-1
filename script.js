@@ -12,81 +12,72 @@ function main() {
     //add geojson layer
     //L.geoJson has two parameters, first is GeoJson data, second is options: https://leafletjs.com/examples/geojson/
     //The onEachFeature option is a function that gets called on each feature before adding it to a GeoJSON layer.
-    //A common reason to use this option is to attach a popup to features when they are clicked.
-    //the for loop is inside the GeoJson
-    function onEachFeature(feature, layer) {
-      let el = document.createElement("div");
-      //queryselecterAll returns array
-      el.innerHTML = feature.properties.Description;
-      let allTd = el.querySelectorAll("td");
+    let hawkerLayer = L.geoJson(hawkerGeoJson.data, {
+      onEachFeature: function (feature, layer) {
+        let el = document.createElement("div");
+        el.innerHTML = feature.properties.Description;
+        let allTd = el.querySelectorAll("td"); //queryselecterAll returns array
 
-      //please dont forget the innerHTML!!!!!
-      let origin = allTd[2].innerHTML;
-      let name = allTd[19].innerHTML;
+        let origin = allTd[2].innerHTML; //dont forget the innerHTML!!!!!
+        let name = allTd[19].innerHTML;
 
-      //not cleancode
-      // layer.bindPopup(`<h2>${name}</h2><h4>${origin}</h4>
-      // <button type="button" class="btn btn-primary" id="see-stalls-button">Show Stalls</button>
-      // <button type="button" class="btn btn-primary" id="random-choice">Don't know what to eat?</button>`);
+        //not cleancode
+        // layer.bindPopup(`<h2>${name}</h2><h4>${origin}</h4>
+        // <button type="button" class="btn btn-primary" id="see-stalls-button">Show Stalls</button>
+        // <button type="button" class="btn btn-primary" id="random-choice">Don't know what to eat?</button>`);
 
-      //using js to create bindpopup html elements
-      const container = document.createElement("div");
+        //create bindpopup html elements
+        const container = document.createElement("div");
 
-      const nameEl = document.createElement("h2");
-      nameEl.innerHTML = `${name}`;
+        const nameEl = document.createElement("h2");
+        nameEl.innerHTML = `${name}`;
 
-      const originEl = document.createElement("h4");
-      originEl.innerHTML = `${origin}`;
+        const originEl = document.createElement("h4");
+        originEl.innerHTML = `${origin}`;
 
-      const stallsButton = document.createElement("button");
-      stallsButton.classList.add("btn", "btn-primary"); //Use the classList.add() method to add one or more classes to the element.
-      stallsButton.setAttribute("id", "see-stalls-button"); // Set id attribute on the element
-      stallsButton.innerText = "Show Stalls";
+        const stallsButton = document.createElement("button");
+        stallsButton.classList.add("btn", "btn-primary"); //Use the classList.add() method to add one or more classes to the element.
+        stallsButton.setAttribute("id", "see-stalls-button"); // Set id attribute on the element
+        stallsButton.innerText = "Show Stalls";
 
-      const choiceButton = document.createElement("button");
-      choiceButton.classList.add("btn", "btn-primary");
-      stallsButton.setAttribute("id", "random-choice"); // Set id attribute on the element
-      choiceButton.innerText = "Don't know what to eat?";
+        const choiceButton = document.createElement("button");
+        choiceButton.classList.add("btn", "btn-primary");
+        choiceButton.setAttribute("id", "random-choice"); // Set id attribute on the element
+        choiceButton.innerText = "Don't know what to eat?";
 
-      //create interaction when click "see stalls" button will show stalls
-      //call fsq API
-      //id created by createElement cannot be accessed by addeventlistener, must use the variable name
-      stallsButton.addEventListener("click", async function () {
-        console.log("hello");
-        let lat = feature.geometry.coordinates[1];
-        let lng = feature.geometry.coordinates[0];
-        let searchResults = await loadData(lat, lng);
-        console.log(searchResults);
-        // initialize stallMarkers for marker clustering
-        let stallMarkers = L.markerClusterGroup();
-        let marker = L.marker(coordinate).addTo(searchResultLayer);
-      });
+        // //create interaction when click "see stalls" button will show stalls
+        // //call fsq API
+        // //id created by createElement cannot be accessed by addeventlistener, must use the variable name
+        stallsButton.addEventListener("click", async function () {
+          console.log("hello");
+          let lat = feature.geometry.coordinates[1];
+          let lng = feature.geometry.coordinates[0];
+          let searchResults = await loadData(lat, lng);
+          console.log(searchResults);
+          // initialize stallMarkers for marker clustering
+          let stallMarkers = L.markerClusterGroup();
+          let marker = L.marker(coordinate).addTo(searchResultLayer);
+        });
 
-      container.append(nameEl, originEl, stallsButton, choiceButton);
+        container.append(nameEl, originEl, stallsButton, choiceButton);
+        console.log(container);
 
-      layer.bindPopup(container);
-    }
+        layer.bindPopup(container);
+      },
 
-    //initialize hawkerCenterMarkers for marker clustering
-    let hawkerCentermarkers = L.markerClusterGroup();
-
-    // using the pointToLayer option to create a CircleMarker as per "Using GeoJSON with Leaflet" Doc, and reference solution "https://gist.github.com/geog4046instructor/80ee78db60862ede74eacba220809b64"
-    function createCustomIcon(feature, latlng) {
-      let myIcon = L.icon({
-        iconUrl: "img/food-stall.png",
-        iconSize: [65, 65], // width and height of the image in pixels
-        shadowSize: [35, 20], // width, height of optional shadow image
-        iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
-        shadowAnchor: [12, 6], // anchor point of the shadow. should be offset
-        popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
-      });
-      return hawkerCentermarkers.addLayer(L.marker(latlng, { icon: myIcon }));
-    }
-
-    //loading geoJson
-    L.geoJSON(hawkerGeoJson.data, {
-      onEachFeature: onEachFeature,
-      pointToLayer: createCustomIcon,
+      // using the pointToLayer option to create a CircleMarker as per "Using GeoJSON with Leaflet" Doc, and reference solution "https://gist.github.com/geog4046instructor/80ee78db60862ede74eacba220809b64"
+      pointToLayer: function (feature, latlng) {
+        let myIcon = L.icon({
+          iconUrl: "img/food-stall.png",
+          iconSize: [65, 65], // width and height of the image in pixels
+          shadowSize: [35, 20], // width, height of optional shadow image
+          iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
+          shadowAnchor: [12, 6], // anchor point of the shadow. should be offset
+          popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
+        });
+        let hawkerCentermarkers = L.markerClusterGroup(); //initialize hawkerCenterMarkers for marker clustering
+        return hawkerCentermarkers.addLayer(L.marker(latlng, { icon: myIcon }));
+      },
     }).addTo(map);
   }
   loadHawkerGeoJson();

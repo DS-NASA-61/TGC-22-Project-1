@@ -43,6 +43,35 @@ body{
     grid-column: span 1 / auto;
     grid-row: span 2 / auto;
 }
+@media screen and (max-width: 768px) {
+    .card-tall{
+        grid-column: span 4;
+    }
+    .card-small-3{
+        grid-column: span 2;
+    }
+    .card-small-4{
+        display: none;
+    }
+    .card-small-5{
+        display: none;
+    }
+}
+@media screen and (max-width: 425px) {
+    .card-tall{
+        grid-column: span 12;
+    }
+    .card-small-3{
+        display: none;
+    }
+    .card-small-4{
+        display: none;
+    }
+    .card-small-5{
+        display: none;
+    }
+}
+
 .search-bar{
     position: fixed;
     z-index: 5000;
