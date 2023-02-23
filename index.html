@@ -13,6 +13,9 @@
         <!--leaflet markerclustering plugin css-->
         <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
         <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+        <!-- leaflet locatecontrol plugin css -->
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.css" />
 
         <link rel="stylesheet" href="style.css" />
         <title>Document</title>
@@ -20,54 +23,57 @@
 
     <body>
 
-        <div id="landing-container">
-            <div id="landing-page">
-                <section class="search-bar">
-                    <div class="container">
-                        <div class="row">
-                            <div class="offset-lg-2">
-                                <div class="hero-caption">
-                                    <h1 class="text-lg- text-md- text-sm-">The Sound Of Clattering
-                                        Dishes.</h1>
-                                    <h1 class="text-lg- text-md- text-sm-">The Blast Of A Fiery Wok Furnace.</h1>
-                                    <h1 class="text-lg- text-md- text-sm-">Hawker Center, Second Home To Many,
-                                        Place
-                                        We Cherish.</h1>
-                                    <p>placeholder</p>
-                                    <div class="search-form">
-                                        <form action="#">
-                                            <input type="search" id="user-search" name="search"
-                                                placeholder="search address">
-                                            <button id="search-button"><ion-icon
-                                                    name="search-outline"></ion-icon></button>
-                                            <!-- create a div to display list of search result -->
-                                            <div id="search-result-list"></div>
-                                        </form>
-                                    </div>
+        <div id="landing-page">
+            <section class="search-bar">
+                <div class="container">
+                    <div class="row">
+                        <div class="offset-lg-2">
+                            <div class="hero-caption">
+                                <h1 class="text-lg- text-md- text-sm-">The Sound Of Clattering
+                                    Dishes.</h1>
+                                <h1 class="text-lg- text-md- text-sm-">The Blast Of A Fiery Wok Furnace.</h1>
+                                <h1 class="text-lg- text-md- text-sm-">Hawker Center, Second Home To Many,
+                                    Place
+                                    We Cherish.</h1>
+                                <p>placeholder</p>
+                                <div class="search-form">
+                                    <form action="#">
+                                        <div class="input-group mb-.
+                                            3">
+                                            <input type="text" class="form-control" id="user-search"
+                                                placeholder="Search Address Here" aria-label="Search Address Here"
+                                                aria-describedby="button-addon2">
+                                            <button class="btn btn-outline-secondary" id="search-button" type="button"
+                                                id="button-addon2"></button>
+                                        </div>
+                                        <!-- <input type="search" id="user-search" name="search" placeholder="search address">
+                                            <button id="search-button"><ion-icon name="search-outline"></ion-icon></button> -->
+                                        <!-- create a div to display list of search result -->
+                                        <div id="search-result-list"></div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                <div class="photo-grid">
+            <div class="photo-grid">
 
-                    <div class="card card-tall" style="background-image: url(img/WeChat\ Image_20230218144755.jpg);">
-                    </div>
-                    <!-- <div class="card card-wide" style="background-image: url(img/ethan-hu-NRTptNBkLLw-unsplash.jpg);"></div> -->
-                    <div class="card card-small-3"
-                        style="background-image: url(img/joshua-tsu-sg3AAPPP6h0-unsplash.jpg);">
-                    </div>
-                    <div class="card card-small-4" style="background-image: url(img/john-t-jFYmErMRcBY-unsplash.jpg);">
-                    </div>
-                    <!-- <div class="card card-small-2" style="background-image: url(img/nauris-pukis-hCzo6BRAjoA-unsplash.jpg);">
+                <div class="card card-tall" style="background-image: url(img/WeChat\ Image_20230218144755.jpg);">
+                </div>
+                <!-- <div class="card card-wide" style="background-image: url(img/ethan-hu-NRTptNBkLLw-unsplash.jpg);"></div> -->
+                <div class="card card-small-3" style="background-image: url(img/joshua-tsu-sg3AAPPP6h0-unsplash.jpg);">
+                </div>
+                <div class="card card-small-4" style="background-image: url(img/john-t-jFYmErMRcBY-unsplash.jpg);">
+                </div>
+                <!-- <div class="card card-small-2" style="background-image: url(img/nauris-pukis-hCzo6BRAjoA-unsplash.jpg);">
                                         </div> -->
-                    <div class="card card-small-5"
-                        style="background-image: url(img/galen-crout-krKxjwjeZBU-unsplash.jpg);">
-                    </div>
+                <div class="card card-small-5" style="background-image: url(img/galen-crout-krKxjwjeZBU-unsplash.jpg);">
                 </div>
             </div>
         </div>
+
 
 
         <div id="map-container">
@@ -115,6 +121,10 @@
 
         <!-- leaflet markerclustering plugin -->
         <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster-src.js"></script>
+
+        <!-- leaflet locatecontrol plugin -->
+        <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.79.0/dist/L.Control.Locate.min.js"
+            charset="utf-8"></script>
 
 
         <script src="map.js"></script>

@@ -3,6 +3,20 @@ const map = createMap(Singapore);
 let searchResultLayer = L.layerGroup();
 searchResultLayer.addTo(map);
 
+//enable zooming to user's current location
+let usercurrentLocation = L.control
+  .locate({
+    initialZoomLevel: 16,
+    drawCircle: false,
+    flyTo: true,
+    strings: {
+      title: "Hey,how me where I am!",
+      popup: "You are here",
+    },
+  })
+  .addTo(map);
+usercurrentLocation.start();
+
 function main() {
   //geojson
   async function loadHawkerGeoJson() {
@@ -12,7 +26,10 @@ function main() {
     //add geojson layer
     //L.geoJson has two parameters, first is GeoJson data, second is options: https://leafletjs.com/examples/geojson/
     //The onEachFeature option is a function that gets called on each feature before adding it to a GeoJSON layer.
-    let hawkerLayer = L.geoJson(hawkerGeoJson.data, {
+
+    let markers = L.markerClusterGroup();
+
+    L.geoJson(hawkerGeoJson.data, {
       onEachFeature: function (feature, layer) {
         let el = document.createElement("div");
         el.innerHTML = feature.properties.Description;
@@ -20,11 +37,6 @@ function main() {
 
         let origin = allTd[2].innerHTML; //dont forget the innerHTML!!!!!
         let name = allTd[19].innerHTML;
-
-        //not cleancode
-        // layer.bindPopup(`<h2>${name}</h2><h4>${origin}</h4>
-        // <button type="button" class="btn btn-primary" id="see-stalls-button">Show Stalls</button>
-        // <button type="button" class="btn btn-primary" id="random-choice">Don't know what to eat?</button>`);
 
         //create bindpopup html elements
         const container = document.createElement("div");
@@ -49,7 +61,6 @@ function main() {
         // //call fsq API
         // //id created by createElement cannot be accessed by addeventlistener, must use the variable name
         stallsButton.addEventListener("click", async function () {
-          console.log("hello");
           let lat = feature.geometry.coordinates[1];
           let lng = feature.geometry.coordinates[0];
           let searchResults = await loadData(lat, lng);
@@ -65,7 +76,7 @@ function main() {
         layer.bindPopup(container);
       },
 
-      // using the pointToLayer option to create a CircleMarker as per "Using GeoJSON with Leaflet" Doc, and reference solution "https://gist.github.com/geog4046instructor/80ee78db60862ede74eacba220809b64"
+      // using the pointToLayer option to create a customer marker as per "Using GeoJSON with Leaflet" Doc, and reference solution "https://gist.github.com/geog4046instructor/80ee78db60862ede74eacba220809b64"
       pointToLayer: function (feature, latlng) {
         let myIcon = L.icon({
           iconUrl: "img/food-stall.png",
@@ -75,8 +86,7 @@ function main() {
           shadowAnchor: [12, 6], // anchor point of the shadow. should be offset
           popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
         });
-        let hawkerCentermarkers = L.markerClusterGroup(); //initialize hawkerCenterMarkers for marker clustering
-        return hawkerCentermarkers.addLayer(L.marker(latlng, { icon: myIcon }));
+        return markers.addLayer(L.marker(latlng, { icon: myIcon }));
       },
     }).addTo(map);
   }

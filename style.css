@@ -4,10 +4,6 @@ body{
     margin: 0rem;
 }
 
-/* #landing-container{
-    position:fixed;
-    z-index: 400000;
-} */
 
 #landing-page{
     position: absolute;
@@ -101,7 +97,7 @@ body{
     color: #484646;
     height: 70px;
 }
-.search-form button{
+/* .search-form button{
     position: absolute;
     height: 50px;
     margin-top: 20px;
@@ -109,7 +105,7 @@ body{
     color: #1c1616;
     background-color: #fff;
     border-radius: 10px;
-}
+} */
 .search-item{
     margin: 5px;
 }
