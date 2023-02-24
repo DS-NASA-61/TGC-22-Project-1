@@ -38,12 +38,11 @@ function main() {
       onEachFeature: function (feature, layer) {
         let el = document.createElement("div");
         el.innerHTML = feature.properties.Description;
-        console.log(feature);
         let allTd = el.querySelectorAll("td"); //queryselecterAll returns array
 
         let origin = allTd[2].innerHTML;
         let name = allTd[19].innerHTML;
-        let xxx = allTd[3].innerHTML;
+        let image = allTd[17].innerHTML;
 
         //create bindpopup html elements
         const container = document.createElement("div");
@@ -51,8 +50,13 @@ function main() {
         nameEl.innerHTML = `${name}`;
         const originEl = document.createElement("h4");
         originEl.innerHTML = `${origin}`;
-        const xxxEl = document.createElement("h4");
-        xxxEl.innerHTML = `${xxx}`;
+
+        const imageEl = document.createElement("img");
+        imageEl.setAttribute("src", image);
+        imageEl.style.border = "5px solid yellow";
+        imageEl.style.height = "350px";
+        imageEl.style.width = "550px";
+
         const stallsButton = document.createElement("button");
         stallsButton.classList.add("btn", "btn-primary"); //Use the classList.add() method to add one or more classes to the element.
         stallsButton.setAttribute("id", "see-stalls-button"); // Set id attribute on the element
@@ -75,7 +79,7 @@ function main() {
         //   let marker = L.marker(coordinate).addTo(searchResultLayer);
         // });
 
-        container.append(xxxEl, nameEl, originEl, stallsButton, choiceButton);
+        container.append(imageEl, nameEl, originEl, stallsButton, choiceButton);
         console.log(container);
 
         layer.bindPopup(container);
