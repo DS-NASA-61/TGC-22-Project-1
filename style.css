@@ -2,6 +2,7 @@ body{
     background-color: #121212;
     padding: 0;
     margin: 0rem;
+    height: 100%;
 }
 
 
@@ -71,11 +72,10 @@ body{
 .search-bar{
     position: fixed;
     z-index: 5000;
-    top: 50%;
+    top: 30%;
 }
 .hero-caption{
     font-family: sans-serif;
-    /* font-weight: 700; */
     color: #fff; 
 }
 .hero-caption h1{
@@ -97,15 +97,7 @@ body{
     color: #484646;
     height: 70px;
 }
-/* .search-form button{
-    position: absolute;
-    height: 50px;
-    margin-top: 20px;
-    border: none;
-    color: #1c1616;
-    background-color: #fff;
-    border-radius: 10px;
-} */
+
 .search-item{
     margin: 5px;
 }
@@ -120,28 +112,19 @@ body{
     height: 100vh;
 }
 
-#hawkerSearch{
+#search-container{
+    display: inline;
     position:absolute;
     top: 10px;
     left: 50px;
     z-index: 1000;
 }
-#hawkerName{
+/* #clear-btn{
+    display: inline;
+} */
+/* #search-input{
     font-size: x-large;
 }
-#hawkersearchBtn{
+#search-btn{
     font-size: x-large;
-}
-
-#stallFoodSearch{
-    position:absolute;
-    margin-top: 50px;
-    margin-left: 50px;
-    z-index: 2000;
-}
-#stallFood{
-    font-size: x-large;
-}
-#stallFoodsearchBtn{
-    font-size: x-large;
-}
+} */

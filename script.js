@@ -1,7 +1,16 @@
 const Singapore = [1.3521, 103.8198]; //leaflet expect lat lng in array, which will be used in the createMap function
 const map = createMap(Singapore);
-let searchResultLayer = L.layerGroup();
-searchResultLayer.addTo(map);
+let searchResultLayer = L.layerGroup().addTo(map);
+
+//customize GeoJson point markers
+const myIcon = L.icon({
+  iconUrl: "img/food-stall.png",
+  iconSize: [65, 65], // width and height of the image in pixels
+  shadowSize: [35, 20], // width, height of optional shadow image
+  iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
+  shadowAnchor: [12, 6], // anchor point of the shadow. should be offset
+  popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
+});
 
 //enable zooming to user's current location
 let usercurrentLocation = L.control
@@ -17,78 +26,68 @@ let usercurrentLocation = L.control
   .addTo(map);
 usercurrentLocation.start();
 
+//main function starts
 function main() {
   //geojson
   async function loadHawkerGeoJson() {
     let hawkerGeoJson = await axios.get("hawker-centres-geojson.geojson");
     console.log(hawkerGeoJson.data);
 
-    //add geojson layer
-    //L.geoJson has two parameters, first is GeoJson data, second is options: https://leafletjs.com/examples/geojson/
-    //The onEachFeature option is a function that gets called on each feature before adding it to a GeoJSON layer.
-
     let markers = L.markerClusterGroup();
-
     L.geoJson(hawkerGeoJson.data, {
       onEachFeature: function (feature, layer) {
         let el = document.createElement("div");
         el.innerHTML = feature.properties.Description;
+        console.log(feature);
         let allTd = el.querySelectorAll("td"); //queryselecterAll returns array
 
-        let origin = allTd[2].innerHTML; //dont forget the innerHTML!!!!!
+        let origin = allTd[2].innerHTML;
         let name = allTd[19].innerHTML;
+        let xxx = allTd[3].innerHTML;
 
         //create bindpopup html elements
         const container = document.createElement("div");
-
         const nameEl = document.createElement("h2");
         nameEl.innerHTML = `${name}`;
-
         const originEl = document.createElement("h4");
         originEl.innerHTML = `${origin}`;
-
+        const xxxEl = document.createElement("h4");
+        xxxEl.innerHTML = `${xxx}`;
         const stallsButton = document.createElement("button");
         stallsButton.classList.add("btn", "btn-primary"); //Use the classList.add() method to add one or more classes to the element.
         stallsButton.setAttribute("id", "see-stalls-button"); // Set id attribute on the element
         stallsButton.innerText = "Show Stalls";
-
         const choiceButton = document.createElement("button");
         choiceButton.classList.add("btn", "btn-primary");
         choiceButton.setAttribute("id", "random-choice"); // Set id attribute on the element
         choiceButton.innerText = "Don't know what to eat?";
 
-        // //create interaction when click "see stalls" button will show stalls
-        // //call fsq API
-        // //id created by createElement cannot be accessed by addeventlistener, must use the variable name
-        stallsButton.addEventListener("click", async function () {
-          let lat = feature.geometry.coordinates[1];
-          let lng = feature.geometry.coordinates[0];
-          let searchResults = await loadData(lat, lng);
-          console.log(searchResults);
-          // initialize stallMarkers for marker clustering
-          let stallMarkers = L.markerClusterGroup();
-          let marker = L.marker(coordinate).addTo(searchResultLayer);
-        });
+        //create interaction when click "see stalls" button will show stalls
+        //call fsq API
+        //id created by createElement cannot be accessed by addeventlistener, must use the variable name
+        // stallsButton.addEventListener("click", async function () {
+        //   let lat = feature.geometry.coordinates[1];
+        //   let lng = feature.geometry.coordinates[0];
+        //   let searchResults = await loadData(lat, lng);
+        //   console.log(searchResults);
+        //   // initialize stallMarkers for marker clustering
+        //   let stallMarkers = L.markerClusterGroup();
+        //   let marker = L.marker(coordinate).addTo(searchResultLayer);
+        // });
 
-        container.append(nameEl, originEl, stallsButton, choiceButton);
+        container.append(xxxEl, nameEl, originEl, stallsButton, choiceButton);
         console.log(container);
 
         layer.bindPopup(container);
       },
 
-      // using the pointToLayer option to create a customer marker as per "Using GeoJSON with Leaflet" Doc, and reference solution "https://gist.github.com/geog4046instructor/80ee78db60862ede74eacba220809b64"
       pointToLayer: function (feature, latlng) {
-        let myIcon = L.icon({
-          iconUrl: "img/food-stall.png",
-          iconSize: [65, 65], // width and height of the image in pixels
-          shadowSize: [35, 20], // width, height of optional shadow image
-          iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
-          shadowAnchor: [12, 6], // anchor point of the shadow. should be offset
-          popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
-        });
-        return markers.addLayer(L.marker(latlng, { icon: myIcon }));
+        return L.marker(latlng, { icon: myIcon });
       },
-    }).addTo(map);
+    }).addTo(markers);
+
+    // map.addLayer(markers);
+    markers.addTo(map);
   }
   loadHawkerGeoJson();
 
@@ -97,6 +96,7 @@ function main() {
     .querySelector("#search-button")
     .addEventListener("click", async function () {
       let searchValue = document.querySelector("#user-search").value;
+
       let searchResults = await getAddress(searchValue);
 
       // //clear layer before search
@@ -126,6 +126,34 @@ function main() {
       }
     });
 }
+
+let searchInput = document.querySelector("#search-input");
+let searchBtn = document.querySelector("#search-btn");
+
+searchInput.addEventListener("input", async function () {
+  //clear existing markers from search result layer
+  // searchResultLayer.clearLayer();
+
+  let response = await getAddress(searchInput.value);
+  console.log(responsee ? responsee : "no repsonseee");
+
+  try {
+    for (let result of response.results) {
+      let coordinate = [result.LATITUDE, result.LONGITUDE];
+      let resultElement = document.createElement("div");
+      resultElement.classList = "search-result";
+      resultElement.innerHTML = result.SEARCHVAL;
+      console.log(resultElement);
+    }
+  } catch (e) {
+    console.log(e);
+    console.log("ex ->", responsee);
+  }
+
+  searchBtn.addEventListener("click", function () {
+    document.querySelector("#card-results").innerHTML = "";
+  });
+});
 
 //adding DOMContentLoaded event before calling main()
 window.addEventListener("DOMContentLoaded", function () {
