@@ -78,13 +78,22 @@ body{
     font-family: sans-serif;
     color: #fff; 
 }
-.hero-caption h1{
-    line-height: initial ;
+@media screen and (max-width:425px) {
+    .hero-caption h1{
+    font-size: 20px;
 }
+}
+
+/* .hero-caption p{
+    font-size: 20px;
+} */
+
 .search-form{
     font-size: 25px;
     width: 100%;
     position: relative;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px ;
 }
 .search-form input{
     width: 60%;
@@ -97,9 +106,21 @@ body{
     color: #484646;
     height: 70px;
 }
+@media screen and (max-width:425px) {
+    .search-form input{
+    font-weight: 300;
+    font-size: 15px;
+    height: 40px;
+}
+}
 
 .search-item{
     margin: 5px;
+}
+#search-results-list{
+    font-size: medium;
+    font-style: italic;
+    color: #484646;
 }
 
 
@@ -112,19 +133,63 @@ body{
     height: 100vh;
 }
 
+/* css to customize Leaflet default styles  */
+.popupCustom .leaflet-popup-content-wrapper {
+    background: #e0e0e0;
+    color: #234c5e;
+}
+
+/* map page search bar */
 #search-container{
-    display: inline;
+    width: 60px;
+    height: 60px;
+    border-radius: 50px;
+    background-color: rgba(222, 226, 214, 0.8);
     position:absolute;
-    top: 10px;
+    top: 10px; 
     left: 50px;
     z-index: 1000;
+    transition: 0.5s;
+    overflow: hidden;
 }
-/* #clear-btn{
-    display: inline;
-} */
-/* #search-input{
-    font-size: x-large;
+#search-container .icon{
+    position: absolute;
+
+    transform: translate(50%, 75%);
 }
-#search-btn{
-    font-size: x-large;
-} */
+#search-container .icon .search{
+    font-size: 21px;
+    cursor: pointer;
+    color: #444;
+}
+#search-container.active{
+    width: 400px;
+}
+#search-container .input{
+    position: relative;
+    width: 300px;
+    height: 60px;
+    left: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+#search-container .input input{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+}
+#search-container .input .clear{
+    position: absolute;
+    right: -5%;
+    /* transform: translate(-50%, -50%); */
+    cursor: pointer;
+    font-size: 20px;
+    
+    
+}

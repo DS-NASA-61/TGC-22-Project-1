@@ -86,12 +86,11 @@ function main() {
       },
     }).addTo(markers);
 
-    // map.addLayer(markers);
     markers.addTo(map);
   }
   loadHawkerGeoJson();
 
-  //user search from home page, using oneMap API
+  //user search from landing page, using oneMap API
   document
     .querySelector("#search-button")
     .addEventListener("click", async function () {
@@ -99,29 +98,46 @@ function main() {
 
       let searchResults = await getAddress(searchValue);
 
-      // //clear layer before search
-      // searchResultLayer.clearLayers();
+      //clear previous search results
+      document.querySelector("#search-results-list").innerHTML = "";
 
       for (let result of searchResults.results) {
-        //create marker and add to searchResultLayer
-        let coordinate = [result.LATITUDE, result.LONGITUDE];
-        let marker = L.marker(coordinate).addTo(searchResultLayer);
-        marker.bindPopup(`<h4>${result.SEARCHVAL}</h4>
-                          <p>${result.ADDRESS}</p>`);
-
         //create search result list
         let resultElement = document.createElement(`div`);
         resultElement.classList.add("search-item");
         resultElement.innerText = result.ADDRESS;
         document
-          .querySelector("#search-result-list")
+          .querySelector("#search-results-list")
           .appendChild(resultElement);
 
         //make the itme clickable
         resultElement.addEventListener("click", function () {
           document.querySelector("#map-container").style.zIndex = "6000";
           document.location.hash = "#map";
-          map.flyTo(coordinate, 18);
+
+          //create marker , customize it and add to searchResultLayer
+          var pinIcon = L.icon({
+            iconUrl: "img/location.png",
+            iconSize: [58, 58], // size of the icon
+            popupAnchor: [0, -15],
+          });
+          let coordinate = [result.LATITUDE, result.LONGITUDE];
+
+          //add marker to searchResultLayer
+          let marker = L.marker(coordinate, { icon: pinIcon }).addTo(
+            searchResultLayer
+          );
+
+          //customize bindpopup
+          let customPopup = `<p>${result.ADDRESS}</p>`;
+          let customOptions = {
+            className: "popupCustom", //give it class name to customize in style.css
+          };
+          marker.bindPopup(customPopup, customOptions);
+          map.flyTo(coordinate, 16);
+          // window.addEventListener("click", function () {
+          //   searchResultLayer.clearLayers();
+          // });
         });
       }
     });
@@ -130,30 +146,31 @@ function main() {
 let searchInput = document.querySelector("#search-input");
 let searchBtn = document.querySelector("#search-btn");
 
-searchInput.addEventListener("input", async function () {
-  //clear existing markers from search result layer
-  // searchResultLayer.clearLayer();
+// searchInput.addEventListener("input", async function () {
+//   //clear existing markers from search result layer
+//   // searchResultLayer.clearLayer();
 
-  let response = await getAddress(searchInput.value);
-  console.log(responsee ? responsee : "no repsonseee");
+//   let response = await getAddress(searchInput.value);
+//   console.log(response ? response : "no repsonseee");
 
-  try {
-    for (let result of response.results) {
-      let coordinate = [result.LATITUDE, result.LONGITUDE];
-      let resultElement = document.createElement("div");
-      resultElement.classList = "search-result";
-      resultElement.innerHTML = result.SEARCHVAL;
-      console.log(resultElement);
-    }
-  } catch (e) {
-    console.log(e);
-    console.log("ex ->", responsee);
-  }
+//   try {
+//     for (let result of response.results) {
+//       let coordinate = [result.LATITUDE, result.LONGITUDE];
+//       let resultElement = document.createElement("div");
+//       resultElement.classList = "search-result";
+//       resultElement.innerHTML = result.SEARCHVAL;
+//       console.log(resultElement);
+//       document.querySelector("#search-results").appendChild(resultElement);
+//     }
+//   } catch (e) {
+//     console.log(e);
+//     console.log("ex ->", response);
+//   }
 
-  searchBtn.addEventListener("click", function () {
-    document.querySelector("#card-results").innerHTML = "";
-  });
-});
+//   searchBtn.addEventListener("click", function () {
+//     document.querySelector("#card-results").innerHTML = "";
+//   });
+// });
 
 //adding DOMContentLoaded event before calling main()
 window.addEventListener("DOMContentLoaded", function () {
