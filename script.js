@@ -6,6 +6,8 @@ let stallsSearchResultLayer = L.layerGroup().addTo(map);
 let markers = L.markerClusterGroup().addTo(map);
 let markersUnderConstruction = L.markerClusterGroup().addTo(map);
 
+let constructionStatus;
+
 const layerController = L.control
   .layers({ markers }, { markersUnderConstruction })
   .addTo(map);
@@ -13,6 +15,16 @@ const layerController = L.control
 //customize GeoJson point markers
 const myIcon = L.icon({
   iconUrl: "img/food-stall.png",
+  iconSize: [65, 65], // width and height of the image in pixels
+  shadowSize: [35, 20], // width, height of optional shadow image
+  iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
+  shadowAnchor: [12, 6], // anchor point of the shadow. should be offset
+  popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
+});
+
+//customize GeoJson point markers
+const myIconUC = L.icon({
+  iconUrl: "img/under-construction.png",
   iconSize: [65, 65], // width and height of the image in pixels
   shadowSize: [35, 20], // width, height of optional shadow image
   iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
@@ -48,7 +60,6 @@ function main() {
     let hawkerGeoJson = await axios.get("hawker-centres-geojson.geojson");
     console.log(hawkerGeoJson.data);
 
-    // let markers = L.markerClusterGroup();
     L.geoJson(hawkerGeoJson.data, {
       onEachFeature: function (feature, layer) {
         let el = document.createElement("div");
@@ -59,6 +70,15 @@ function main() {
         let name = allTd[19].innerHTML;
         let image = allTd[17].innerHTML;
         let status = allTd[3].innerHTML;
+
+        // Check if the hawker center is under construction or not
+        if (status == "Under Construction") {
+          constructionStatus = true;
+        } else {
+          constructionStatus = false;
+        }
+
+        // console.log("construction status: " + constructionStatus);
 
         //create bindpopup html elements
         const container = document.createElement("div");
@@ -150,11 +170,17 @@ function main() {
       },
 
       pointToLayer: function (feature, latlng) {
-        return L.marker(latlng, { icon: myIcon });
+        console.log("construction status: " + constructionStatus);
+        // create generic variables to reference the layer group and icon type depending on construction status
+        let iconType;
+        if (constructionStatus == true) {
+          iconType = myIconUC;
+        } else {
+          iconType = myIcon;
+        }
+        return L.marker(latlng, { icon: iconType });
       },
     }).addTo(markers);
-
-    // markers.addTo(map);
   }
   loadHawkerGeoJson();
 
