@@ -73,7 +73,7 @@ function main() {
         stallsButton.setAttribute("aria-controls", "offcanvasBottom");
         stallsButton.innerText = "Show Stalls";
 
-        // Create offcanvas container element
+        // Create Bootstrap offcanvas container element
         const offcanvasContainer = document.createElement("div");
         offcanvasContainer.setAttribute("class", "offcanvas offcanvas-bottom");
         offcanvasContainer.setAttribute("tabindex", "-1");
@@ -83,11 +83,11 @@ function main() {
           "offcanvasBottomLabel"
         );
 
-        // Create offcanvas header element
+        // Create Bootstrap offcanvas header element
         const offcanvasHeader = document.createElement("div");
         offcanvasHeader.setAttribute("class", "offcanvas-header");
 
-        // Create offcanvas title element
+        // Create Bootstrap offcanvas title element
         const offcanvasTitle = document.createElement("h5");
         offcanvasTitle.setAttribute("class", "offcanvas-title");
         offcanvasTitle.setAttribute("id", "offcanvasBottomLabel");
@@ -107,7 +107,10 @@ function main() {
         // Create offcanvas body element
         const offcanvasBody = document.createElement("div");
         offcanvasBody.setAttribute("class", "offcanvas-body small");
-        offcanvasBody.textContent = "...";
+        offcanvasBody.innerHTML =
+          "Here are some of the stills in this Hawker Center";
+        offcanvasBody.style.backgroundImage =
+          "url('img/NHB_HC_Roots Page Banner.jpg')";
 
         // Append offcanvasHeader and offcanvasBody to offcanvasContainer
         offcanvasContainer.appendChild(offcanvasHeader);
@@ -119,15 +122,15 @@ function main() {
 
         // create interaction when click "see stalls" button will show stalls, using fsq API
         // id created by createElement cannot be accessed by addeventlistener, must use the variable name
-        stallsButton.addEventListener("click", async function () {
-          stallsSearchResultLayer.clearLayers();
-          let lat = feature.geometry.coordinates[1];
-          let lng = feature.geometry.coordinates[0];
-          let coordinate = [lat, lng];
-          let searchResults = await loadData(lat, lng);
-          console.log(searchResults);
-          L.marker(coordinate).addTo(stallsSearchResultLayer);
-        });
+        // stallsButton.addEventListener("click", async function () {
+        //   stallsSearchResultLayer.clearLayers();
+        //   let lat = feature.geometry.coordinates[1];
+        //   let lng = feature.geometry.coordinates[0];
+        //   let coordinate = [lat, lng];
+        //   let searchResults = await loadData(lat, lng);
+        //   console.log(searchResults);
+        //   L.marker(coordinate).addTo(stallsSearchResultLayer);
+        // });
 
         container.append(imageEl, nameEl, originEl, stallsButton);
         console.log(container);
@@ -185,6 +188,12 @@ function main() {
           let marker = L.marker(coordinate, { icon: pinIcon }).addTo(
             searchResultLayer
           );
+
+          document
+            .querySelector("#clear-icon")
+            .addEventListener("click", function () {
+              searchResultLayer.clearLayers();
+            });
 
           //customize bindpopup
           let customPopup = `<p>${result.ADDRESS}</p>`;
