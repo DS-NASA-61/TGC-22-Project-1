@@ -131,6 +131,7 @@ body{
 
 #map {
     height: 100vh;
+    width: 100vw;
 }
 
 /* css to customize Leaflet default styles  */
@@ -150,11 +151,9 @@ body{
     left: 50px;
     z-index: 1000;
     transition: 0.5s;
-    overflow: hidden;
 }
 #search-container .icon{
     position: absolute;
-
     transform: translate(50%, 75%);
 }
 #search-container .icon .search{
@@ -190,6 +189,13 @@ body{
     /* transform: translate(-50%, -50%); */
     cursor: pointer;
     font-size: 20px;
-    
-    
+}
+#search-results{
+    /* z-index: 3000; */
+    position: absolute;
+
+}
+
+.overflow-hidden {
+    overflow: hidden;
 }

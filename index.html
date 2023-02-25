@@ -80,7 +80,7 @@
             </div>
 
 
-            <div class="container" id="search-container">
+            <div class="container overflow-hidden" id="search-container">
                 <div class="icon">
                     <i class="search fa fa-search" id="search-icon"></i>
                 </div>
@@ -88,6 +88,7 @@
                     <input type="text" placeholder="Enter place name or address" id="search-input">
                     <i class="clear fa fa-times" id="clear-icon"></i>
                 </div>
+                <div id="search-results"></div>
             </div>
 
             <script>
@@ -95,6 +96,7 @@
                 let clear = document.querySelector(".clear")
                 search.onclick = function () {
                     document.querySelector("#search-container").classList.toggle("active");
+                    document.querySelector("#search-container").classList.toggle("overflow-hidden");
                 }
                 clear.onclick = function () {
                     document.querySelector("#search-input").value = "";

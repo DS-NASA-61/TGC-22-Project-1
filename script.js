@@ -1,6 +1,7 @@
 const Singapore = [1.3521, 103.8198]; //leaflet expect lat lng in array, which will be used in the createMap function
 const map = createMap(Singapore);
 let searchResultLayer = L.layerGroup().addTo(map);
+let stallsSearchResultLayer = L.layerGroup().addTo(map);
 
 //customize GeoJson point markers
 const myIcon = L.icon({
@@ -66,18 +67,17 @@ function main() {
         choiceButton.setAttribute("id", "random-choice"); // Set id attribute on the element
         choiceButton.innerText = "Don't know what to eat?";
 
-        //create interaction when click "see stalls" button will show stalls
-        //call fsq API
-        //id created by createElement cannot be accessed by addeventlistener, must use the variable name
-        // stallsButton.addEventListener("click", async function () {
-        //   let lat = feature.geometry.coordinates[1];
-        //   let lng = feature.geometry.coordinates[0];
-        //   let searchResults = await loadData(lat, lng);
-        //   console.log(searchResults);
-        //   // initialize stallMarkers for marker clustering
-        //   let stallMarkers = L.markerClusterGroup();
-        //   let marker = L.marker(coordinate).addTo(searchResultLayer);
-        // });
+        // create interaction when click "see stalls" button will show stalls, using fsq API
+        // id created by createElement cannot be accessed by addeventlistener, must use the variable name
+        stallsButton.addEventListener("click", async function () {
+          stallsSearchResultLayer.clearLayers();
+          let lat = feature.geometry.coordinates[1];
+          let lng = feature.geometry.coordinates[0];
+          let coordinate = [lat, lng];
+          let searchResults = await loadData(lat, lng);
+          console.log(searchResults);
+          L.marker(coordinate).addTo(stallsSearchResultLayer);
+        });
 
         container.append(imageEl, nameEl, originEl, stallsButton, choiceButton);
         console.log(container);
@@ -116,8 +116,12 @@ function main() {
 
         //make the itme clickable
         resultElement.addEventListener("click", function () {
-          document.querySelector("#map-container").style.zIndex = "6000";
-          document.location.hash = "#map";
+          document.querySelector("#landing-page").style.zIndex = "-1";
+          // document.location.hash = "#map";
+
+          // resultElement.addEventListener("click", function () {
+          // document.querySelector("#map-container").style.zIndex = "6000";
+          // document.location.hash = "#map";
 
           //create marker , customize it and add to searchResultLayer
           var pinIcon = L.icon({
@@ -148,35 +152,54 @@ function main() {
 }
 
 let searchInput = document.querySelector("#search-input");
-let searchBtn = document.querySelector("#search-btn");
+let searchBtn = document.querySelector("#search-icon");
 
-// searchInput.addEventListener("input", async function () {
-//   //clear existing markers from search result layer
-//   // searchResultLayer.clearLayer();
+searchInput.addEventListener("keyup", async function () {
+  //clear existing markers from search result layer
+  // searchResultLayer.clearLayer();
 
-//   let response = await getAddress(searchInput.value);
-//   console.log(response ? response : "no repsonseee");
+  document.querySelector("#search-results").innerHTML = "";
 
-//   try {
-//     for (let result of response.results) {
-//       let coordinate = [result.LATITUDE, result.LONGITUDE];
-//       let resultElement = document.createElement("div");
-//       resultElement.classList = "search-result";
-//       resultElement.innerHTML = result.SEARCHVAL;
-//       console.log(resultElement);
-//       document.querySelector("#search-results").appendChild(resultElement);
-//     }
-//   } catch (e) {
-//     console.log(e);
-//     console.log("ex ->", response);
-//   }
+  let response = await getAddress(searchInput.value);
+  console.log(response ? response : "no repsonseee");
 
-//   searchBtn.addEventListener("click", function () {
-//     document.querySelector("#card-results").innerHTML = "";
-//   });
-// });
+  // let seen = set();
 
-//adding DOMContentLoaded event before calling main()
+  // try {
+  //   for (let result of response.results) {
+  //     if (result.SEARCHVAL in seen) {
+  //       continue;
+  //     } else {
+  //       seen.add(result.SEARCHVAL);
+  //     }
+
+  let seen = [];
+  try {
+    for (let result of response.results) {
+      if (seen.includes(result.SEARCHVAL)) {
+        continue;
+      } else {
+        seen.push(result.SEARCHVAL);
+      }
+
+      let coordinate = [result.LATITUDE, result.LONGITUDE];
+      let resultElement = document.createElement("div");
+      resultElement.classList = "search-result";
+      resultElement.innerHTML = result.SEARCHVAL;
+      console.log(resultElement);
+      document.querySelector("#search-results").appendChild(resultElement);
+    }
+  } catch (e) {
+    console.log(e);
+    console.log("ex ->", response);
+  }
+
+  searchBtn.addEventListener("click", function () {
+    document.querySelector("#search-results").innerHTML = "";
+  });
+});
+
+// adding DOMContentLoaded event before calling main()
 window.addEventListener("DOMContentLoaded", function () {
   main();
 });
