@@ -3,6 +3,13 @@ const map = createMap(Singapore);
 let searchResultLayer = L.layerGroup().addTo(map);
 let stallsSearchResultLayer = L.layerGroup().addTo(map);
 
+let markers = L.markerClusterGroup().addTo(map);
+let markersUnderConstruction = L.markerClusterGroup().addTo(map);
+
+const layerController = L.control
+  .layers({ markers }, { markersUnderConstruction })
+  .addTo(map);
+
 //customize GeoJson point markers
 const myIcon = L.icon({
   iconUrl: "img/food-stall.png",
@@ -41,7 +48,7 @@ function main() {
     let hawkerGeoJson = await axios.get("hawker-centres-geojson.geojson");
     console.log(hawkerGeoJson.data);
 
-    let markers = L.markerClusterGroup();
+    // let markers = L.markerClusterGroup();
     L.geoJson(hawkerGeoJson.data, {
       onEachFeature: function (feature, layer) {
         let el = document.createElement("div");
@@ -51,13 +58,17 @@ function main() {
         let origin = allTd[2].innerHTML;
         let name = allTd[19].innerHTML;
         let image = allTd[17].innerHTML;
+        let status = allTd[3].innerHTML;
 
         //create bindpopup html elements
         const container = document.createElement("div");
+
         const nameEl = document.createElement("h2");
         nameEl.innerHTML = `${name}`;
         const originEl = document.createElement("h4");
         originEl.innerHTML = `${origin}`;
+        const statusEl = document.createElement("h4");
+        originEl.innerHTML = `status : ${status}`;
 
         const imageEl = document.createElement("img");
         imageEl.setAttribute("src", image);
@@ -132,7 +143,7 @@ function main() {
         //   L.marker(coordinate).addTo(stallsSearchResultLayer);
         // });
 
-        container.append(imageEl, nameEl, originEl, stallsButton);
+        container.append(statusEl, imageEl, nameEl, originEl, stallsButton);
         console.log(container);
 
         layer.bindPopup(container);
@@ -143,7 +154,7 @@ function main() {
       },
     }).addTo(markers);
 
-    markers.addTo(map);
+    // markers.addTo(map);
   }
   loadHawkerGeoJson();
 
