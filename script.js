@@ -13,6 +13,13 @@ const myIcon = L.icon({
   popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
 });
 
+//create marker , customize it and add to searchResultLayer
+let pinIcon = L.icon({
+  iconUrl: "img/location.png",
+  iconSize: [58, 58], // size of the icon
+  popupAnchor: [0, -15],
+});
+
 //enable zooming to user's current location
 let usercurrentLocation = L.control
   .locate({
@@ -61,11 +68,54 @@ function main() {
         const stallsButton = document.createElement("button");
         stallsButton.classList.add("btn", "btn-primary"); //Use the classList.add() method to add one or more classes to the element.
         stallsButton.setAttribute("id", "see-stalls-button"); // Set id attribute on the element
+        stallsButton.setAttribute("data-bs-toggle", "offcanvas"); //below 3 lines are to use Bootstrap offcanvas
+        stallsButton.setAttribute("data-bs-target", "#offcanvasBottom");
+        stallsButton.setAttribute("aria-controls", "offcanvasBottom");
         stallsButton.innerText = "Show Stalls";
-        const choiceButton = document.createElement("button");
-        choiceButton.classList.add("btn", "btn-primary");
-        choiceButton.setAttribute("id", "random-choice"); // Set id attribute on the element
-        choiceButton.innerText = "Don't know what to eat?";
+
+        // Create offcanvas container element
+        const offcanvasContainer = document.createElement("div");
+        offcanvasContainer.setAttribute("class", "offcanvas offcanvas-bottom");
+        offcanvasContainer.setAttribute("tabindex", "-1");
+        offcanvasContainer.setAttribute("id", "offcanvasBottom");
+        offcanvasContainer.setAttribute(
+          "aria-labelledby",
+          "offcanvasBottomLabel"
+        );
+
+        // Create offcanvas header element
+        const offcanvasHeader = document.createElement("div");
+        offcanvasHeader.setAttribute("class", "offcanvas-header");
+
+        // Create offcanvas title element
+        const offcanvasTitle = document.createElement("h5");
+        offcanvasTitle.setAttribute("class", "offcanvas-title");
+        offcanvasTitle.setAttribute("id", "offcanvasBottomLabel");
+        offcanvasTitle.textContent = "Offcanvas bottom";
+
+        // Create close button element
+        const closeButton = document.createElement("button");
+        closeButton.setAttribute("type", "button");
+        closeButton.setAttribute("class", "btn-close");
+        closeButton.setAttribute("data-bs-dismiss", "offcanvas");
+        closeButton.setAttribute("aria-label", "Close");
+
+        // Append offcanvasTitle and closeButton to offcanvasHeader
+        offcanvasHeader.appendChild(offcanvasTitle);
+        offcanvasHeader.appendChild(closeButton);
+
+        // Create offcanvas body element
+        const offcanvasBody = document.createElement("div");
+        offcanvasBody.setAttribute("class", "offcanvas-body small");
+        offcanvasBody.textContent = "...";
+
+        // Append offcanvasHeader and offcanvasBody to offcanvasContainer
+        offcanvasContainer.appendChild(offcanvasHeader);
+        offcanvasContainer.appendChild(offcanvasBody);
+
+        // Append button and offcanvasContainer to document body
+        document.body.appendChild(stallsButton);
+        document.body.appendChild(offcanvasContainer);
 
         // create interaction when click "see stalls" button will show stalls, using fsq API
         // id created by createElement cannot be accessed by addeventlistener, must use the variable name
@@ -79,7 +129,7 @@ function main() {
           L.marker(coordinate).addTo(stallsSearchResultLayer);
         });
 
-        container.append(imageEl, nameEl, originEl, stallsButton, choiceButton);
+        container.append(imageEl, nameEl, originEl, stallsButton);
         console.log(container);
 
         layer.bindPopup(container);
@@ -124,11 +174,11 @@ function main() {
           // document.location.hash = "#map";
 
           //create marker , customize it and add to searchResultLayer
-          var pinIcon = L.icon({
-            iconUrl: "img/location.png",
-            iconSize: [58, 58], // size of the icon
-            popupAnchor: [0, -15],
-          });
+          // let pinIcon = L.icon({
+          //   iconUrl: "img/location.png",
+          //   iconSize: [58, 58], // size of the icon
+          //   popupAnchor: [0, -15],
+          // });
           let coordinate = [result.LATITUDE, result.LONGITUDE];
 
           //add marker to searchResultLayer
@@ -155,16 +205,12 @@ let searchInput = document.querySelector("#search-input");
 let searchBtn = document.querySelector("#search-icon");
 
 searchInput.addEventListener("keyup", async function () {
-  //clear existing markers from search result layer
-  // searchResultLayer.clearLayer();
-
   document.querySelector("#search-results").innerHTML = "";
 
   let response = await getAddress(searchInput.value);
   console.log(response ? response : "no repsonseee");
 
   // let seen = set();
-
   // try {
   //   for (let result of response.results) {
   //     if (result.SEARCHVAL in seen) {
@@ -173,13 +219,13 @@ searchInput.addEventListener("keyup", async function () {
   //       seen.add(result.SEARCHVAL);
   //     }
 
-  let seen = [];
+  let newResult = [];
   try {
     for (let result of response.results) {
-      if (seen.includes(result.SEARCHVAL)) {
+      if (newResult.includes(result.SEARCHVAL)) {
         continue;
       } else {
-        seen.push(result.SEARCHVAL);
+        newResult.push(result.SEARCHVAL);
       }
 
       let coordinate = [result.LATITUDE, result.LONGITUDE];
@@ -188,15 +234,18 @@ searchInput.addEventListener("keyup", async function () {
       resultElement.innerHTML = result.SEARCHVAL;
       console.log(resultElement);
       document.querySelector("#search-results").appendChild(resultElement);
+
+      resultElement.addEventListener("click", function () {
+        searchResultLayer.clearLayers();
+        document.querySelector("#search-results").innerHTML = "";
+        L.marker(coordinate, { icon: pinIcon }).addTo(searchResultLayer);
+        map.flyTo(coordinate, 16);
+      });
     }
   } catch (e) {
     console.log(e);
     console.log("ex ->", response);
   }
-
-  searchBtn.addEventListener("click", function () {
-    document.querySelector("#search-results").innerHTML = "";
-  });
 });
 
 // adding DOMContentLoaded event before calling main()

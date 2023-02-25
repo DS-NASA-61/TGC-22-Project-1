@@ -121,6 +121,7 @@ body{
     font-size: medium;
     font-style: italic;
     color: #484646;
+    cursor: pointer;
 }
 
 
@@ -193,6 +194,7 @@ body{
 #search-results{
     /* z-index: 3000; */
     position: absolute;
+    cursor: pointer;
 
 }
 
