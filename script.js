@@ -2,6 +2,7 @@ const Singapore = [1.3521, 103.8198]; //leaflet expect lat lng in array, which w
 const map = createMap(Singapore);
 let searchResultLayer = L.layerGroup().addTo(map);
 let stallsSearchResultLayer = L.layerGroup().addTo(map);
+let markers = L.markerClusterGroup().addTo(map);
 
 let constructionStatus;
 
@@ -15,7 +16,7 @@ let constructionStatus;
 
 // L.control.layers(existingLayer, underConstructionLayer).addTo(map);
 
-//customize GeoJson points
+//customize GeoJson point markers
 const myIcon = L.icon({
   iconUrl: "img/food-stall.png",
   iconSize: [65, 65], // width and height of the image in pixels
@@ -25,7 +26,7 @@ const myIcon = L.icon({
   popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
 });
 
-//customize GeoJson points
+//customize GeoJson point markers
 const myIconUC = L.icon({
   iconUrl: "img/under-construction.png",
   iconSize: [65, 65], // width and height of the image in pixels
@@ -35,7 +36,7 @@ const myIconUC = L.icon({
   popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
 });
 
-//customize marker for searchResultLayer
+//create marker , customize it and add to searchResultLayer
 let pinIcon = L.icon({
   iconUrl: "img/location.png",
   iconSize: [58, 58], // size of the icon
@@ -63,9 +64,9 @@ function main() {
     let hawkerGeoJson = await axios.get("hawker-centres-geojson.geojson");
     console.log(hawkerGeoJson.data);
 
-    let markers = L.markerClusterGroup().addTo(map);
+    // let markers = L.markerClusterGroup().addTo(map);
 
-    //define a function customizing bindPopUp to be used for onEachFeature
+    //define a function to be used onEachFeature later to customize bindPopUp
     function onEachFeature(feature, layer) {
       let el = document.createElement("div");
       el.innerHTML = feature.properties.Description;
@@ -160,7 +161,7 @@ function main() {
       layer.bindPopup(container);
     }
 
-    // Define the filtering function for layer control
+    // Define the filtering function
     function filterFeatures(feature) {
       if (feature.properties && feature.properties.Description) {
         return feature.properties.Description.includes("Construction");
@@ -178,15 +179,15 @@ function main() {
         console.log("construction status: " + constructionStatus);
 
         // create generic variables to reference the layer group and icon type depending on construction status
-        let iconType;
+        // let iconType;
 
-        if (constructionStatus == true) {
-          iconType = myIconUC;
-        } else {
-          iconType = myIcon;
-        }
+        // if (constructionStatus == true) {
+        //   iconType = myIconUC;
+        // } else {
+        //   iconType = myIcon;
+        // }
 
-        return L.marker(latlng, { icon: iconType });
+        return L.marker(latlng, { icon: myIconUC });
       },
     }).addTo(markers);
 
@@ -200,17 +201,25 @@ function main() {
         console.log("construction status: " + constructionStatus);
 
         // create generic variables to reference the layer group and icon type depending on construction status
-        let iconType;
+        // let iconType;
 
-        if (constructionStatus == true) {
-          iconType = myIconUC;
-        } else {
-          iconType = myIcon;
-        }
+        // if (constructionStatus == true) {
+        //   iconType = myIconUC;
+        // } else {
+        //   iconType = myIcon;
+        // }
 
-        return L.marker(latlng, { icon: iconType });
+        return L.marker(latlng, { icon: myIcon });
       },
     }).addTo(markers);
+
+    let firstLayer = {
+      "Existing Hawker Centers": existingLayer,
+    };
+    let secondLayer = {
+      "Hawker Centers Under Construction": underConstructionLayer,
+    };
+    L.control.layers(null, secondLayer).addTo(map);
 
     //create GeoJson layer
     // L.geoJson(hawkerGeoJson.data, {
