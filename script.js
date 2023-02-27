@@ -240,21 +240,14 @@ function main() {
           .querySelector("#search-results-list")
           .appendChild(resultElement);
 
+        window.addEventListener("click", function () {
+          resultElement.innerText = "";
+        });
+
         //make the itme clickable
         resultElement.addEventListener("click", function () {
           document.querySelector("#landing-page").style.zIndex = "-1";
-          // document.location.hash = "#map";
 
-          // resultElement.addEventListener("click", function () {
-          // document.querySelector("#map-container").style.zIndex = "6000";
-          // document.location.hash = "#map";
-
-          //create marker , customize it and add to searchResultLayer
-          // let pinIcon = L.icon({
-          //   iconUrl: "img/location.png",
-          //   iconSize: [58, 58], // size of the icon
-          //   popupAnchor: [0, -15],
-          // });
           let coordinate = [result.LATITUDE, result.LONGITUDE];
 
           //add marker to searchResultLayer
@@ -275,9 +268,6 @@ function main() {
           };
           marker.bindPopup(customPopup, customOptions);
           map.flyTo(coordinate, 16);
-          // window.addEventListener("click", function () {
-          //   searchResultLayer.clearLayers();
-          // });
         });
       }
     });

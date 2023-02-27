@@ -19,7 +19,6 @@ body{
     gap: 0rem;
     grid-template-columns: repeat(4,minmax(auto,3fr));
     grid-template-rows: 50vh 50vh;
-    /* grid-auto-rows: 100vh; */
 }
 .card{
     display: flex;
@@ -33,9 +32,6 @@ body{
     grid-row: span 2 / auto;
     grid-column: span 2 / auto
 }
-/* .card-small-2{
-    grid-column: span 2 / auto;
-} */
 .card-small-3{
     grid-column: span 1 / auto;
     grid-row: span 2 / auto;
@@ -69,24 +65,86 @@ body{
     }
 }
 
-.search-bar{
+/* landing caption and searchbar section */
+.landing-search-section{
     position: fixed;
     z-index: 5000;
     top: 30%;
 }
-.hero-caption{
-    font-family: sans-serif;
-    color: #fff; 
+
+#home-title{
+    font-family: Gilroy,sans-serif;
+    font-size: 100px;
+    font-weight:800;
+    color: #E76F51
 }
-@media screen and (max-width:425px) {
-    .hero-caption h1{
-    font-size: 20px;
+@media screen and (max-width:768px){
+    #home-title{
+    font-size: 56px;
+}
+}
+@media screen and (max-width:425px){
+    #home-title{
+    font-size: 36px;
+    color: #D34E24;
 }
 }
 
-/* .hero-caption p{
-    font-size: 20px;
-} */
+.home-Subtitle1{
+    font-family: Gilroy,sans-serif;
+    font-size: 35px;
+    font-weight: 900;
+    color: #FFEBC6;
+}
+@media screen and (max-width:768px){
+    .home-Subtitle1{
+    font-size: 25px;
+}
+}
+@media screen and (max-width:425px){
+    .home-Subtitle1{
+    display: none;
+}
+}
+
+.home-Subtitle2{
+    font-family: Gilroy,sans-serif;
+    font-size: 45px;
+    font-weight: 800;
+    color: #FFB100
+}
+@media screen and (max-width:768px){
+    .home-Subtitle2{
+    font-size: 25px;
+}
+}
+@media screen and (max-width:425px){
+    .home-Subtitle2{
+    font-size: 25px;
+    font-weight: 600;
+    color: whitesmoke;
+}
+}
+
+.hero-caption p{
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-top: 20px;
+    margin-bottom: 0;
+    font-size: 25px;
+    font-weight: bold;
+    color:lightgray;
+    margin-left: 1%;
+}
+@media screen and (max-width:768px){
+    .hero-caption p{
+    font-size: 18px;
+}
+}
+@media screen and (max-width:425px){
+    .hero-caption p{
+    font-size: 12px;
+}
+}
 
 .search-form{
     font-size: 25px;
@@ -129,13 +187,22 @@ body{
     position: absolute; 
     cursor: pointer; 
     top:100px;
+    left: 95%;
+    top: 90%;
 }
+@media screen and (max-width:425px) {
+    #form-validation{
+    left: 80%;
+    top: 90%;
+}
+}
+
 
 .btn.btn-outline-secondary{
     --bs-btn-border-color: none,
 }
 #loveletter{
-    width: 70px;
+    width: 65px;
 }
 @media screen and (max-width:425px) {
     #loveletter{
