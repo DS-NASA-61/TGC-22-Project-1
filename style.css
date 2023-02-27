@@ -124,6 +124,25 @@ body{
     cursor: pointer;
 }
 
+#form-validation{
+    z-index: 5001;
+    position: absolute; 
+    cursor: pointer; 
+    top:100px;
+}
+
+.btn.btn-outline-secondary{
+    --bs-btn-border-color: none,
+}
+#loveletter{
+    width: 70px;
+}
+@media screen and (max-width:425px) {
+    #loveletter{
+    width: 40px;
+}
+}
+
 
 /* map */
 #map-container{
@@ -195,9 +214,10 @@ body{
     /* z-index: 3000; */
     position: absolute;
     cursor: pointer;
-
 }
 
 .overflow-hidden {
     overflow: hidden;
 }
+
+
