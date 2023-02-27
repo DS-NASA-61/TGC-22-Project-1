@@ -3,16 +3,19 @@ const map = createMap(Singapore);
 let searchResultLayer = L.layerGroup().addTo(map);
 let stallsSearchResultLayer = L.layerGroup().addTo(map);
 
-let markers = L.markerClusterGroup().addTo(map);
-let markersUnderConstruction = L.markerClusterGroup().addTo(map);
-
 let constructionStatus;
 
-const layerController = L.control
-  .layers({ markers }, { markersUnderConstruction })
-  .addTo(map);
+// let existingLayer = {
+//   "Existing Hawker Centers": markers,
+// };
 
-//customize GeoJson point markers
+// let underConstructionLayer = {
+//   "Hawker Centers Under Construction": markersUnderConstruction,
+// };
+
+// L.control.layers(existingLayer, underConstructionLayer).addTo(map);
+
+//customize GeoJson points
 const myIcon = L.icon({
   iconUrl: "img/food-stall.png",
   iconSize: [65, 65], // width and height of the image in pixels
@@ -22,7 +25,7 @@ const myIcon = L.icon({
   popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
 });
 
-//customize GeoJson point markers
+//customize GeoJson points
 const myIconUC = L.icon({
   iconUrl: "img/under-construction.png",
   iconSize: [65, 65], // width and height of the image in pixels
@@ -32,7 +35,7 @@ const myIconUC = L.icon({
   popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
 });
 
-//create marker , customize it and add to searchResultLayer
+//customize marker for searchResultLayer
 let pinIcon = L.icon({
   iconUrl: "img/location.png",
   iconSize: [58, 58], // size of the icon
@@ -55,132 +58,179 @@ usercurrentLocation.start();
 
 //main function starts
 function main() {
-  //geojson
+  //get geojson data
   async function loadHawkerGeoJson() {
     let hawkerGeoJson = await axios.get("hawker-centres-geojson.geojson");
     console.log(hawkerGeoJson.data);
 
-    L.geoJson(hawkerGeoJson.data, {
-      onEachFeature: function (feature, layer) {
-        let el = document.createElement("div");
-        el.innerHTML = feature.properties.Description;
-        let allTd = el.querySelectorAll("td"); //queryselecterAll returns array
+    let markers = L.markerClusterGroup().addTo(map);
 
-        let origin = allTd[2].innerHTML;
-        let name = allTd[19].innerHTML;
-        let image = allTd[17].innerHTML;
-        let status = allTd[3].innerHTML;
+    //define a function customizing bindPopUp to be used for onEachFeature
+    function onEachFeature(feature, layer) {
+      let el = document.createElement("div");
+      el.innerHTML = feature.properties.Description;
+      let allTd = el.querySelectorAll("td"); //queryselecterAll returns array
 
-        // Check if the hawker center is under construction or not
-        if (status == "Under Construction") {
-          constructionStatus = true;
-        } else {
-          constructionStatus = false;
-        }
+      let origin = allTd[2].innerHTML;
+      let name = allTd[19].innerHTML;
+      let image = allTd[17].innerHTML;
+      let status = allTd[3].innerHTML;
 
-        // console.log("construction status: " + constructionStatus);
+      // Check if the hawker center is under construction or not
+      if (status == "Under Construction") {
+        constructionStatus = true;
+      } else {
+        constructionStatus = false;
+      }
 
-        //create bindpopup html elements
-        const container = document.createElement("div");
+      //create bindpopup html elements
+      const container = document.createElement("div");
 
-        const nameEl = document.createElement("h2");
-        nameEl.innerHTML = `${name}`;
-        const originEl = document.createElement("h4");
-        originEl.innerHTML = `${origin}`;
-        const statusEl = document.createElement("h4");
-        originEl.innerHTML = `status : ${status}`;
+      const nameEl = document.createElement("h2");
+      nameEl.innerHTML = `${name}`;
+      const originEl = document.createElement("h4");
+      originEl.innerHTML = `${origin}`;
+      const statusEl = document.createElement("h4");
+      originEl.innerHTML = `status : ${status}`;
 
-        const imageEl = document.createElement("img");
-        imageEl.setAttribute("src", image);
-        imageEl.style.border = "5px solid yellow";
-        imageEl.style.height = "350px";
-        imageEl.style.width = "550px";
+      const imageEl = document.createElement("img");
+      imageEl.setAttribute("src", image);
+      imageEl.style.border = "5px solid yellow";
+      imageEl.style.height = "350px";
+      imageEl.style.width = "550px";
 
-        const stallsButton = document.createElement("button");
-        stallsButton.classList.add("btn", "btn-primary"); //Use the classList.add() method to add one or more classes to the element.
-        stallsButton.setAttribute("id", "see-stalls-button"); // Set id attribute on the element
-        stallsButton.setAttribute("data-bs-toggle", "offcanvas"); //below 3 lines are to use Bootstrap offcanvas
-        stallsButton.setAttribute("data-bs-target", "#offcanvasBottom");
-        stallsButton.setAttribute("aria-controls", "offcanvasBottom");
-        stallsButton.innerText = "Show Stalls";
+      const stallsButton = document.createElement("button");
+      stallsButton.classList.add("btn", "btn-primary"); //Use the classList.add() method to add one or more classes to the element.
+      stallsButton.setAttribute("id", "see-stalls-button"); // Set id attribute on the element
+      stallsButton.setAttribute("data-bs-toggle", "offcanvas"); //below 3 lines are to use Bootstrap offcanvas
+      stallsButton.setAttribute("data-bs-target", "#offcanvasBottom");
+      stallsButton.setAttribute("aria-controls", "offcanvasBottom");
+      stallsButton.innerText = "Show Stalls";
 
-        // Create Bootstrap offcanvas container element
-        const offcanvasContainer = document.createElement("div");
-        offcanvasContainer.setAttribute("class", "offcanvas offcanvas-bottom");
-        offcanvasContainer.setAttribute("tabindex", "-1");
-        offcanvasContainer.setAttribute("id", "offcanvasBottom");
-        offcanvasContainer.setAttribute(
-          "aria-labelledby",
-          "offcanvasBottomLabel"
-        );
+      // Create Bootstrap offcanvas container element
+      const offcanvasContainer = document.createElement("div");
+      offcanvasContainer.setAttribute("class", "offcanvas offcanvas-bottom");
+      offcanvasContainer.setAttribute("tabindex", "-1");
+      offcanvasContainer.setAttribute("id", "offcanvasBottom");
+      offcanvasContainer.setAttribute(
+        "aria-labelledby",
+        "offcanvasBottomLabel"
+      );
 
-        // Create Bootstrap offcanvas header element
-        const offcanvasHeader = document.createElement("div");
-        offcanvasHeader.setAttribute("class", "offcanvas-header");
+      // Create Bootstrap offcanvas header element
+      const offcanvasHeader = document.createElement("div");
+      offcanvasHeader.setAttribute("class", "offcanvas-header");
 
-        // Create Bootstrap offcanvas title element
-        const offcanvasTitle = document.createElement("h5");
-        offcanvasTitle.setAttribute("class", "offcanvas-title");
-        offcanvasTitle.setAttribute("id", "offcanvasBottomLabel");
-        offcanvasTitle.textContent = "Offcanvas bottom";
+      // Create Bootstrap offcanvas title element
+      const offcanvasTitle = document.createElement("h5");
+      offcanvasTitle.setAttribute("class", "offcanvas-title");
+      offcanvasTitle.setAttribute("id", "offcanvasBottomLabel");
+      offcanvasTitle.textContent = "Offcanvas bottom";
 
-        // Create close button element
-        const closeButton = document.createElement("button");
-        closeButton.setAttribute("type", "button");
-        closeButton.setAttribute("class", "btn-close");
-        closeButton.setAttribute("data-bs-dismiss", "offcanvas");
-        closeButton.setAttribute("aria-label", "Close");
+      // Create close button element
+      const closeButton = document.createElement("button");
+      closeButton.setAttribute("type", "button");
+      closeButton.setAttribute("class", "btn-close");
+      closeButton.setAttribute("data-bs-dismiss", "offcanvas");
+      closeButton.setAttribute("aria-label", "Close");
 
-        // Append offcanvasTitle and closeButton to offcanvasHeader
-        offcanvasHeader.appendChild(offcanvasTitle);
-        offcanvasHeader.appendChild(closeButton);
+      // Append offcanvasTitle and closeButton to offcanvasHeader
+      offcanvasHeader.appendChild(offcanvasTitle);
+      offcanvasHeader.appendChild(closeButton);
 
-        // Create offcanvas body element
-        const offcanvasBody = document.createElement("div");
-        offcanvasBody.setAttribute("class", "offcanvas-body small");
-        offcanvasBody.innerHTML =
-          "Here are some of the stills in this Hawker Center";
-        offcanvasBody.style.backgroundImage =
-          "url('img/NHB_HC_Roots Page Banner.jpg')";
+      // Create offcanvas body element
+      const offcanvasBody = document.createElement("div");
+      offcanvasBody.setAttribute("class", "offcanvas-body small");
+      offcanvasBody.innerHTML =
+        "Here are some of the stills in this Hawker Center";
+      offcanvasBody.style.backgroundImage =
+        "url('img/NHB_HC_Roots Page Banner.jpg')";
 
-        // Append offcanvasHeader and offcanvasBody to offcanvasContainer
-        offcanvasContainer.appendChild(offcanvasHeader);
-        offcanvasContainer.appendChild(offcanvasBody);
+      // Append offcanvasHeader and offcanvasBody to offcanvasContainer
+      offcanvasContainer.appendChild(offcanvasHeader);
+      offcanvasContainer.appendChild(offcanvasBody);
 
-        // Append button and offcanvasContainer to document body
-        document.body.appendChild(stallsButton);
-        document.body.appendChild(offcanvasContainer);
+      // Append button and offcanvasContainer to document body
+      document.body.appendChild(stallsButton);
+      document.body.appendChild(offcanvasContainer);
 
-        // create interaction when click "see stalls" button will show stalls, using fsq API
-        // id created by createElement cannot be accessed by addeventlistener, must use the variable name
-        // stallsButton.addEventListener("click", async function () {
-        //   stallsSearchResultLayer.clearLayers();
-        //   let lat = feature.geometry.coordinates[1];
-        //   let lng = feature.geometry.coordinates[0];
-        //   let coordinate = [lat, lng];
-        //   let searchResults = await loadData(lat, lng);
-        //   console.log(searchResults);
-        //   L.marker(coordinate).addTo(stallsSearchResultLayer);
-        // });
+      container.append(statusEl, imageEl, nameEl, originEl, stallsButton);
+      console.log(container);
 
-        container.append(statusEl, imageEl, nameEl, originEl, stallsButton);
-        console.log(container);
+      layer.bindPopup(container);
+    }
 
-        layer.bindPopup(container);
-      },
+    // Define the filtering function for layer control
+    function filterFeatures(feature) {
+      if (feature.properties && feature.properties.Description) {
+        return feature.properties.Description.includes("Construction");
+      }
+      return false;
+    }
+    // Filter the features based on the filtering function
+    // let filteredFeatures = myFeatures.features.filter(filterFeatures);
 
+    // Create the GeoJSON layer for the filtered features
+    let underConstructionLayer = L.geoJSON(hawkerGeoJson.data, {
+      filter: filterFeatures,
+      onEachFeature: onEachFeature,
       pointToLayer: function (feature, latlng) {
         console.log("construction status: " + constructionStatus);
+
         // create generic variables to reference the layer group and icon type depending on construction status
         let iconType;
+
         if (constructionStatus == true) {
           iconType = myIconUC;
         } else {
           iconType = myIcon;
         }
+
         return L.marker(latlng, { icon: iconType });
       },
     }).addTo(markers);
+
+    // Create the GeoJSON layer for the non-filtered features
+    let existingLayer = L.geoJSON(hawkerGeoJson.data, {
+      filter: function (feature) {
+        return !filterFeatures(feature);
+      },
+      onEachFeature: onEachFeature,
+      pointToLayer: function (feature, latlng) {
+        console.log("construction status: " + constructionStatus);
+
+        // create generic variables to reference the layer group and icon type depending on construction status
+        let iconType;
+
+        if (constructionStatus == true) {
+          iconType = myIconUC;
+        } else {
+          iconType = myIcon;
+        }
+
+        return L.marker(latlng, { icon: iconType });
+      },
+    }).addTo(markers);
+
+    //create GeoJson layer
+    // L.geoJson(hawkerGeoJson.data, {
+    //   onEachFeature: onEachFeature,
+
+    //   pointToLayer: function (feature, latlng) {
+    //     console.log("construction status: " + constructionStatus);
+
+    //     // create generic variables to reference the layer group and icon type depending on construction status
+    //     let iconType;
+
+    //     if (constructionStatus == true) {
+    //       iconType = myIconUC;
+    //     } else {
+    //       iconType = myIcon;
+    //     }
+
+    //     return L.marker(latlng, { icon: iconType });
+    //   },
+    // }).addTo(markers);
   }
   loadHawkerGeoJson();
 
