@@ -2,7 +2,7 @@ const Singapore = [1.3521, 103.8198]; //leaflet expect lat lng in array, which w
 const map = createMap(Singapore);
 let searchResultLayer = L.layerGroup().addTo(map);
 let stallsSearchResultLayer = L.layerGroup().addTo(map);
-let markers = L.markerClusterGroup().addTo(map);
+// let markerClusterGroup = L.markerClusterGroup().addTo(map);
 
 let constructionStatus;
 
@@ -64,8 +64,6 @@ function main() {
     let hawkerGeoJson = await axios.get("hawker-centres-geojson.geojson");
     console.log(hawkerGeoJson.data);
 
-    // let markers = L.markerClusterGroup().addTo(map);
-
     //define a function to be used onEachFeature later to customize bindPopUp
     function onEachFeature(feature, layer) {
       let el = document.createElement("div");
@@ -77,7 +75,7 @@ function main() {
       let image = allTd[17].innerHTML;
       let status = allTd[3].innerHTML;
 
-      // Check if the hawker center is under construction or not
+      // Check if the hawker center is under construction or not, just a sanity check
       if (status == "Under Construction") {
         constructionStatus = true;
       } else {
@@ -106,7 +104,7 @@ function main() {
       stallsButton.setAttribute("data-bs-toggle", "offcanvas"); //below 3 lines are to use Bootstrap offcanvas
       stallsButton.setAttribute("data-bs-target", "#offcanvasBottom");
       stallsButton.setAttribute("aria-controls", "offcanvasBottom");
-      stallsButton.innerText = "Show Stalls";
+      stallsButton.innerText = "What should I eat?";
 
       // Create Bootstrap offcanvas container element
       const offcanvasContainer = document.createElement("div");
@@ -172,6 +170,7 @@ function main() {
     // let filteredFeatures = myFeatures.features.filter(filterFeatures);
 
     // Create the GeoJSON layer for the filtered features
+    let filteredClusterGroup = L.markerClusterGroup();
     let underConstructionLayer = L.geoJSON(hawkerGeoJson.data, {
       filter: filterFeatures,
       onEachFeature: onEachFeature,
@@ -189,9 +188,10 @@ function main() {
 
         return L.marker(latlng, { icon: myIconUC });
       },
-    }).addTo(markers);
+    }).addTo(filteredClusterGroup);
 
     // Create the GeoJSON layer for the non-filtered features
+    let nonFilteredClusterGroup = L.markerClusterGroup();
     let existingLayer = L.geoJSON(hawkerGeoJson.data, {
       filter: function (feature) {
         return !filterFeatures(feature);
@@ -199,47 +199,24 @@ function main() {
       onEachFeature: onEachFeature,
       pointToLayer: function (feature, latlng) {
         console.log("construction status: " + constructionStatus);
-
-        // create generic variables to reference the layer group and icon type depending on construction status
-        // let iconType;
-
-        // if (constructionStatus == true) {
-        //   iconType = myIconUC;
-        // } else {
-        //   iconType = myIcon;
-        // }
-
         return L.marker(latlng, { icon: myIcon });
       },
-    }).addTo(markers);
+    }).addTo(nonFilteredClusterGroup);
 
-    let firstLayer = {
-      "Existing Hawker Centers": existingLayer,
+    let overlayMaps = {
+      "Hawker Centers Under Construction ": filteredClusterGroup,
+      "Existing Hawker Centers": nonFilteredClusterGroup,
     };
-    let secondLayer = {
-      "Hawker Centers Under Construction": underConstructionLayer,
-    };
-    L.control.layers(null, secondLayer).addTo(map);
+    // let firstLayer = {
+    //   "Existing Hawker Centers": existingLayer,
+    // };
+    // let secondLayer = {
+    //   "Hawker Centers Under Construction": underConstructionLayer,
+    // };
+    L.control.layers(overlayMaps, null, { position: "topleft" }).addTo(map);
 
-    //create GeoJson layer
-    // L.geoJson(hawkerGeoJson.data, {
-    //   onEachFeature: onEachFeature,
-
-    //   pointToLayer: function (feature, latlng) {
-    //     console.log("construction status: " + constructionStatus);
-
-    //     // create generic variables to reference the layer group and icon type depending on construction status
-    //     let iconType;
-
-    //     if (constructionStatus == true) {
-    //       iconType = myIconUC;
-    //     } else {
-    //       iconType = myIcon;
-    //     }
-
-    //     return L.marker(latlng, { icon: iconType });
-    //   },
-    // }).addTo(markers);
+    // Add the marker cluster groups to the map by default
+    nonFilteredClusterGroup.addTo(map);
   }
   loadHawkerGeoJson();
 
