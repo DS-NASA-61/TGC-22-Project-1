@@ -210,8 +210,101 @@ body{
 }
 }
 
+#form-container{
+    position: absolute;
+    z-index: 7001;
+    background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+	overflow: hidden;
+	width: 400px;
+	max-width: 100%;
+}
+.header {
+	border-bottom: 1px solid #f0f0f0;
+	background-color: #f7f7f7;
+	padding: 20px 40px;
+}
+.form {
+	padding: 30px 40px;	
+}
+.landing-form-control {
+	margin-bottom: 10px;
+	padding-bottom: 20px;
+	position: relative;
+}
+.landing-form-control label {
+	display: inline-block;
+	margin-bottom: 5px;
+}
 
-/* map */
+.landing-form-control input {
+	border: 2px solid #f0f0f0;
+	border-radius: 4px;
+	display: block;
+	font-family: inherit;
+	font-size: 14px;
+	padding: 10px;
+	width: 100%;
+}
+.landing-form-control input:focus {
+	outline: 0;
+	border-color: #777;
+}
+
+.landing-form-control.success input {
+	border-color: #2ecc71;
+}
+
+.landing-form-control.error input {
+	border-color: #e74c3c;
+}
+
+.landing-form-control i {
+	visibility: hidden;
+	position: absolute;
+	top: 40px;
+	right: 10px;
+}
+
+.landing-form-control.success i.fa-check-circle {
+	color: #2ecc71;
+	visibility: visible;
+}
+
+.landing-form-control.error i.fa-exclamation-circle {
+	color: #e74c3c;
+	visibility: visible;
+}
+
+.landing-form-control small {
+	color: #e74c3c;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	visibility: hidden;
+}
+
+.landing-form-control.error small {
+	visibility: visible;
+}
+
+.form button {
+	background-color: #E76F51;
+	border: 2px solid #E76F51;
+	border-radius: 4px;
+	color: #fff;
+	display: block;
+	font-family: inherit;
+	font-size: 16px;
+	padding: 10px;
+	margin-top: 20px;
+	width: 100%;
+}
+
+
+
+/* map */   
 #map-container{
     position: relative;
 }
@@ -232,7 +325,7 @@ body{
     width: 60px;
     height: 60px;
     border-radius: 50px;
-    background-color: rgba(222, 226, 214, 0.8);
+    background-color: rgba(202,137,95,0.8);
     position:absolute;
     top: 10px; 
     left: 50px;
@@ -240,7 +333,7 @@ body{
     transition: 0.5s;
 }
 #search-container .icon{
-    position: absolute;
+    position: absolute; 
     transform: translate(50%, 75%);
 }
 #search-container .icon .search{

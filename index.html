@@ -33,6 +33,48 @@
             </button>
         </div>
 
+        <div class="container" id="form-container">
+            <div class="header">
+                <h2>Create Account</h2>
+            </div>
+            <form id="form" class="form">
+                <div class="landing-form-control">
+                    <label for="username">Username</label>
+                    <input type="text" placeholder="lovehawker22" id="username" />
+                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-exclamation-circle"></i>
+                    <small>Error message</small>
+                </div>
+                <div class="landing-form-control">
+                    <label for="username">Email</label>
+                    <input type="email" placeholder="love@hawkersg.com" id="email" />
+                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-exclamation-circle"></i>
+                    <small>Error message</small>
+                </div>
+                <div class="landing-form-control">
+                    <label for="username">Password</label>
+                    <input type="password" placeholder="Password" id="password" />
+                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-exclamation-circle"></i>
+                    <small>Error message</small>
+                </div>
+                <div class="landing-form-control">
+                    <label for="username">What's your hawker pick of the day?</label>
+                    <!-- hfotd: hawker food of the day -->
+                    <input type="text" placeholder="We'd love to know" id="hfotd" />
+                    <!-- <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-exclamation-circle"></i>
+                    <small>Error message</small> -->
+                </div>
+                <button>Submit</button>
+            </form>
+        </div>
+
+
+
+
+
         <div id="landing-page">
             <section class="landing-search-section">
                 <div class="container">
@@ -112,7 +154,6 @@
                     document.querySelector("#search-input").value = "";
                 }
             </script>
-
         </div>
 
 
