@@ -213,17 +213,27 @@ body{
 #form-container{
     position: absolute;
     z-index: 7001;
+    justify-content: center;
     background-color: #fff;
 	border-radius: 5px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 	overflow: hidden;
 	width: 400px;
 	max-width: 100%;
+    padding: 0;
 }
+#form-container.active{
+    transform: translate(50%,50%) scale(1);
+    transition: top 0ms ease-in-out 0ms,    
+                transform 200ms ease-in-out 0ms;;
+}
+
 .header {
 	border-bottom: 1px solid #f0f0f0;
 	background-color: #f7f7f7;
 	padding: 20px 40px;
+    display: flex;
+    justify-content: center;
 }
 .form {
 	padding: 30px 40px;	
