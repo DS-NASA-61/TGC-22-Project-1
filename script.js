@@ -91,7 +91,7 @@ function main() {
 
       //start creating bootstrap offcanvas button
       const stallsButton = document.createElement("button");
-      stallsButton.classList.add("btn", "btn-primary"); //Use the classList.add() method to add one or more classes to the element.
+      stallsButton.classList.add("btn", "btn-success"); //Use the classList.add() method to add one or more classes to the element.
       stallsButton.setAttribute("id", "see-stalls-button"); // Set id attribute on the element
       stallsButton.setAttribute("data-bs-toggle", "offcanvas"); //below 3 lines are to use Bootstrap offcanvas
       stallsButton.setAttribute("data-bs-target", "#offcanvasBottom");
@@ -118,10 +118,6 @@ function main() {
       offcanvasBodyButton.setAttribute("class", "btn btn-success btn-lg");
       offcanvasBodyButton.innerHTML = "Help me decide what to eat";
       offcanvasHeader.appendChild(offcanvasBodyButton);
-      // offcanvasBody.appendChild(offcanvasBodyButton);
-      // offcanvasTitle.setAttribute("class", "offcanvas-title");
-      // offcanvasTitle.setAttribute("id", "offcanvasBottomLabel");
-      // offcanvasTitle.textContent = "Help me decide what to eat";
 
       // Create close button element
       const closeButton = document.createElement("button");
@@ -130,8 +126,7 @@ function main() {
       closeButton.setAttribute("data-bs-dismiss", "offcanvas");
       closeButton.setAttribute("aria-label", "Close");
 
-      // Append offcanvasTitle and closeButton to offcanvasHeader
-      // offcanvasHeader.appendChild(offcanvasTitle);
+      // Append closeButton to offcanvasHeader
       offcanvasHeader.appendChild(closeButton);
 
       // Create offcanvas body element
@@ -139,16 +134,9 @@ function main() {
       offcanvasBody.setAttribute("class", "offcanvas-body small");
       offcanvasBody.style.backgroundImage =
         "url('img/NHB_HC_Roots Page Banner.jpg')";
-      // offcanvasBody.innerHTML =
-      //   "Here are some of the stalls in this Hawker Center";
-
-      //create a button in offcanvas body
-      // const offcanvasBodyButton = document.createElement("button");
-      // offcanvasBodyButton.setAttribute("class", "btn btn-success btn-lg");
-      // offcanvasBodyButton.innerHTML = "Click me";
-      // offcanvasBody.appendChild(offcanvasBodyButton);
 
       offcanvasBodyButton.addEventListener("click", async () => {
+        offcanvasBody.innerHTML = "";
         const singaporeBounds = {
           north: 1.472361,
           south: 1.24403,
@@ -168,14 +156,21 @@ function main() {
         let data = await loadData(lat, lng);
         console.log(data);
         let i = Math.floor(Math.random() * 10);
-        let randomChoice = data.results[i].name;
-        console.log(randomChoice);
+        let randomChoiceName = data.results[i].name;
+        console.log(randomChoiceName);
 
-        // display the randomContainer in offcanvas body
+        let randomChoiceAddress;
+        if (data.results[i].location.address_extended === undefined) {
+          randomChoiceAddress = `${data.results[i].location.formatted_address}`;
+        } else {
+          randomChoiceAddress = `${data.results[i].location.formatted_address} ${data.results[i].location.address_extended}`;
+        }
+
+        // create a card in offcanvas body to display random choice
         const randomContainer = document.createElement("div");
         randomContainer.setAttribute(
           "class",
-          "row col-sm-4 col-md-6 col-lg-3 card"
+          "row col-sm-4 col-md-6 col-lg-3 border-success mb-3 card"
         );
         randomContainer.setAttribute(
           "style",
@@ -185,16 +180,19 @@ function main() {
         cardHeader.setAttribute("class", "card-header");
         cardHeader.innerText = "How about ...";
         const cardBody = document.createElement("div");
-        cardBody.setAttribute("class", "card-body");
-        const cardBlockquote = document.createElement("blockquote");
-        cardBlockquote.setAttribute("class", "blockquote mb-0");
-        const blockquoteP = document.createElement("p");
-        blockquoteP.innerHTML = "test test test";
+        cardBody.setAttribute("class", "card-body text-success");
+        const cardTitle = document.createElement("h5");
+        cardTitle.setAttribute("class", "card-title");
+        cardTitle.innerText = randomChoiceName;
+        const cardText = document.createElement("p");
+        cardText.setAttribute("class", "card-text");
+        cardText.innerText = randomChoiceAddress;
 
+        cardBody.append(cardTitle, cardText);
         randomContainer.append(cardHeader, cardBody);
-
         offcanvasBody.appendChild(randomContainer);
 
+        //this line of code is for future improvement: when click, flyto the stall location on the map
         // offcanvasBodyButton.setAttribute("data-bs-dismiss", "offcanvas");
       });
 
@@ -225,7 +223,29 @@ function main() {
     let filteredClusterGroup = L.markerClusterGroup();
     L.geoJSON(hawkerGeoJson.data, {
       filter: filterFeatures,
-      onEachFeature: onEachFeature,
+      onEachFeature: function (feature, layer) {
+        let el = document.createElement("div");
+        el.innerHTML = feature.properties.Description;
+        let allTd = el.querySelectorAll("td"); //queryselecterAll returns array
+
+        let origin = allTd[2].innerHTML;
+        let name = allTd[19].innerHTML;
+        let status = allTd[3].innerHTML;
+
+        //create bindpopup html elements
+        const container = document.createElement("div");
+
+        const nameEl = document.createElement("h4");
+        nameEl.innerHTML = `${name}`;
+        const originEl = document.createElement("h5");
+        originEl.innerHTML = `Built in: ${origin}`;
+        const statusEl = document.createElement("h5");
+        statusEl.innerHTML = `Status: ${status}`;
+
+        container.append(nameEl, statusEl, originEl);
+
+        layer.bindPopup(container);
+      },
       pointToLayer: function (feature, latlng) {
         console.log("construction status: " + constructionStatus);
 
@@ -357,7 +377,17 @@ searchInput.addEventListener("keyup", async function () {
       resultElement.addEventListener("click", function () {
         searchResultLayer.clearLayers();
         document.querySelector("#search-results").innerHTML = "";
-        L.marker(coordinate, { icon: pinIcon }).addTo(searchResultLayer);
+        let marker = L.marker(coordinate, { icon: pinIcon }).addTo(
+          searchResultLayer
+        );
+
+        //customize bindpopup
+        let customPopup = `<p>${result.ADDRESS}</p>`;
+        let customOptions = {
+          className: "popupCustom", //give it class name to customize in style.css
+        };
+        marker.bindPopup(customPopup, customOptions);
+
         map.flyTo(coordinate, 16);
       });
     }
