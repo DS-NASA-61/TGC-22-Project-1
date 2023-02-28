@@ -13,8 +13,8 @@ async function loadData(lat, lng) {
         // query: query,
         ll: lat + "," + lng,
         limit: 50,
-        radius: 300, //preset as 200m to fix it within the premises of the hawker center
-        categories: "13052,13053,13054", //preset it as for food related only
+        radius: 5000, //preset to fix it within the premises of the hawker center ideally
+        categories: "13000", //preset it as for food related only
       },
     }
   );

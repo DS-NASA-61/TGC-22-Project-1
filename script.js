@@ -2,19 +2,8 @@ const Singapore = [1.3521, 103.8198]; //leaflet expect lat lng in array, which w
 const map = createMap(Singapore);
 let searchResultLayer = L.layerGroup().addTo(map);
 let stallsSearchResultLayer = L.layerGroup().addTo(map);
-// let markerClusterGroup = L.markerClusterGroup().addTo(map);
 
 let constructionStatus;
-
-// let existingLayer = {
-//   "Existing Hawker Centers": markers,
-// };
-
-// let underConstructionLayer = {
-//   "Hawker Centers Under Construction": markersUnderConstruction,
-// };
-
-// L.control.layers(existingLayer, underConstructionLayer).addTo(map);
 
 //customize GeoJson point markers
 const myIcon = L.icon({
@@ -57,6 +46,9 @@ let usercurrentLocation = L.control
   .addTo(map);
 usercurrentLocation.start();
 
+//using fsq API to generate random food option
+function getRandomLatLng() {}
+
 //main function starts
 function main() {
   //get geojson data
@@ -85,19 +77,19 @@ function main() {
       //create bindpopup html elements
       const container = document.createElement("div");
 
-      const nameEl = document.createElement("h2");
+      const nameEl = document.createElement("h4");
       nameEl.innerHTML = `${name}`;
-      const originEl = document.createElement("h4");
-      originEl.innerHTML = `${origin}`;
-      const statusEl = document.createElement("h4");
-      originEl.innerHTML = `status : ${status}`;
+      const originEl = document.createElement("h5");
+      originEl.innerHTML = `Built in: ${origin}`;
+      const statusEl = document.createElement("h5");
+      statusEl.innerHTML = `Status: ${status}`;
 
       const imageEl = document.createElement("img");
       imageEl.setAttribute("src", image);
-      imageEl.style.border = "5px solid yellow";
-      imageEl.style.height = "350px";
-      imageEl.style.width = "550px";
+      imageEl.style.height = "200px";
+      imageEl.style.width = "300px";
 
+      //start creating bootstrap offcanvas button
       const stallsButton = document.createElement("button");
       stallsButton.classList.add("btn", "btn-primary"); //Use the classList.add() method to add one or more classes to the element.
       stallsButton.setAttribute("id", "see-stalls-button"); // Set id attribute on the element
@@ -119,12 +111,17 @@ function main() {
       // Create Bootstrap offcanvas header element
       const offcanvasHeader = document.createElement("div");
       offcanvasHeader.setAttribute("class", "offcanvas-header");
+      offcanvasHeader.style.backgroundColor = "#FFEBB9";
 
       // Create Bootstrap offcanvas title element
-      const offcanvasTitle = document.createElement("h5");
-      offcanvasTitle.setAttribute("class", "offcanvas-title");
-      offcanvasTitle.setAttribute("id", "offcanvasBottomLabel");
-      offcanvasTitle.textContent = "Offcanvas bottom";
+      const offcanvasBodyButton = document.createElement("button");
+      offcanvasBodyButton.setAttribute("class", "btn btn-success btn-lg");
+      offcanvasBodyButton.innerHTML = "Help me decide what to eat";
+      offcanvasHeader.appendChild(offcanvasBodyButton);
+      // offcanvasBody.appendChild(offcanvasBodyButton);
+      // offcanvasTitle.setAttribute("class", "offcanvas-title");
+      // offcanvasTitle.setAttribute("id", "offcanvasBottomLabel");
+      // offcanvasTitle.textContent = "Help me decide what to eat";
 
       // Create close button element
       const closeButton = document.createElement("button");
@@ -134,16 +131,72 @@ function main() {
       closeButton.setAttribute("aria-label", "Close");
 
       // Append offcanvasTitle and closeButton to offcanvasHeader
-      offcanvasHeader.appendChild(offcanvasTitle);
+      // offcanvasHeader.appendChild(offcanvasTitle);
       offcanvasHeader.appendChild(closeButton);
 
       // Create offcanvas body element
       const offcanvasBody = document.createElement("div");
       offcanvasBody.setAttribute("class", "offcanvas-body small");
-      offcanvasBody.innerHTML =
-        "Here are some of the stills in this Hawker Center";
       offcanvasBody.style.backgroundImage =
         "url('img/NHB_HC_Roots Page Banner.jpg')";
+      // offcanvasBody.innerHTML =
+      //   "Here are some of the stalls in this Hawker Center";
+
+      //create a button in offcanvas body
+      // const offcanvasBodyButton = document.createElement("button");
+      // offcanvasBodyButton.setAttribute("class", "btn btn-success btn-lg");
+      // offcanvasBodyButton.innerHTML = "Click me";
+      // offcanvasBody.appendChild(offcanvasBodyButton);
+
+      offcanvasBodyButton.addEventListener("click", async () => {
+        const singaporeBounds = {
+          north: 1.472361,
+          south: 1.24403,
+          west: 103.807216,
+          east: 104.026119,
+        };
+        // Generate a random coordinate within Singapore boundaries
+        const lat = (
+          Math.random() * (singaporeBounds.north - singaporeBounds.south) +
+          singaporeBounds.south
+        ).toFixed(4);
+        const lng = (
+          Math.random() * (singaporeBounds.east - singaporeBounds.west) +
+          singaporeBounds.west
+        ).toFixed(4);
+        // call FSQ API to get random location
+        let data = await loadData(lat, lng);
+        console.log(data);
+        let i = Math.floor(Math.random() * 10);
+        let randomChoice = data.results[i].name;
+        console.log(randomChoice);
+
+        // display the randomContainer in offcanvas body
+        const randomContainer = document.createElement("div");
+        randomContainer.setAttribute(
+          "class",
+          "row col-sm-4 col-md-6 col-lg-3 card"
+        );
+        randomContainer.setAttribute(
+          "style",
+          "display: flex; justify-content: center; align-items: center; margin: auto;"
+        );
+        const cardHeader = document.createElement("div");
+        cardHeader.setAttribute("class", "card-header");
+        cardHeader.innerText = "How about ...";
+        const cardBody = document.createElement("div");
+        cardBody.setAttribute("class", "card-body");
+        const cardBlockquote = document.createElement("blockquote");
+        cardBlockquote.setAttribute("class", "blockquote mb-0");
+        const blockquoteP = document.createElement("p");
+        blockquoteP.innerHTML = "test test test";
+
+        randomContainer.append(cardHeader, cardBody);
+
+        offcanvasBody.appendChild(randomContainer);
+
+        // offcanvasBodyButton.setAttribute("data-bs-dismiss", "offcanvas");
+      });
 
       // Append offcanvasHeader and offcanvasBody to offcanvasContainer
       offcanvasContainer.appendChild(offcanvasHeader);
@@ -153,10 +206,11 @@ function main() {
       document.body.appendChild(stallsButton);
       document.body.appendChild(offcanvasContainer);
 
-      container.append(statusEl, imageEl, nameEl, originEl, stallsButton);
+      container.append(imageEl, nameEl, statusEl, originEl, stallsButton);
       console.log(container);
 
       layer.bindPopup(container);
+      // layer.bindPopup(feature.properties.Description); this is for testing
     }
 
     // Define the filtering function
@@ -166,12 +220,10 @@ function main() {
       }
       return false;
     }
-    // Filter the features based on the filtering function
-    // let filteredFeatures = myFeatures.features.filter(filterFeatures);
 
-    // Create the GeoJSON layer for the filtered features
+    // Create the GeoJSON layer and add to targeted markerclusterGroup for the filtered features
     let filteredClusterGroup = L.markerClusterGroup();
-    let underConstructionLayer = L.geoJSON(hawkerGeoJson.data, {
+    L.geoJSON(hawkerGeoJson.data, {
       filter: filterFeatures,
       onEachFeature: onEachFeature,
       pointToLayer: function (feature, latlng) {
@@ -190,9 +242,9 @@ function main() {
       },
     }).addTo(filteredClusterGroup);
 
-    // Create the GeoJSON layer for the non-filtered features
+    // Create the GeoJSON layer and add to targeted markerclusterGroup for the non-filtered features
     let nonFilteredClusterGroup = L.markerClusterGroup();
-    let existingLayer = L.geoJSON(hawkerGeoJson.data, {
+    L.geoJSON(hawkerGeoJson.data, {
       filter: function (feature) {
         return !filterFeatures(feature);
       },
@@ -207,15 +259,10 @@ function main() {
       "Hawker Centers Under Construction ": filteredClusterGroup,
       "Existing Hawker Centers": nonFilteredClusterGroup,
     };
-    // let firstLayer = {
-    //   "Existing Hawker Centers": existingLayer,
-    // };
-    // let secondLayer = {
-    //   "Hawker Centers Under Construction": underConstructionLayer,
-    // };
+
     L.control.layers(overlayMaps, null, { position: "topleft" }).addTo(map);
 
-    // Add the marker cluster groups to the map by default
+    // Add the default view markerclustergroups to the map
     nonFilteredClusterGroup.addTo(map);
   }
   loadHawkerGeoJson();
@@ -273,6 +320,7 @@ function main() {
     });
 }
 
+//search bar on the map page
 let searchInput = document.querySelector("#search-input");
 let searchBtn = document.querySelector("#search-icon");
 
@@ -280,7 +328,6 @@ searchInput.addEventListener("keyup", async function () {
   document.querySelector("#search-results").innerHTML = "";
 
   let response = await getAddress(searchInput.value);
-  console.log(response ? response : "no repsonseee");
 
   // let seen = set();
   // try {
@@ -319,6 +366,8 @@ searchInput.addEventListener("keyup", async function () {
     console.log("ex ->", response);
   }
 });
+
+//add form validation
 
 // adding DOMContentLoaded event before calling main()
 window.addEventListener("DOMContentLoaded", function () {
