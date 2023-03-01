@@ -52,7 +52,7 @@ body{
         display: none;
     }
 }
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 375px) {
     .card-tall{
         grid-column: span 12;
     }
@@ -85,7 +85,7 @@ body{
     font-size: 56px;
 }
 }
-@media screen and (max-width:425px){
+@media screen and (max-width:375px){
     #home-title{
     font-size: 36px;
     color: #D34E24;
@@ -182,6 +182,16 @@ body{
     font-style: italic;
     color: #484646;
     cursor: pointer;
+}
+@media screen and (max-width:425px) {
+    #search-results-list{
+    font-size: x-small;
+}
+}
+
+
+.offcanvas{
+    z-index: 5002;
 }
 
 #form-validation{
@@ -301,17 +311,31 @@ body{
     width: 60px;
     height: 60px;
     border-radius: 50px;
-    background-color: rgba(202,137,95,0.8);
+    border: 0.12rem solid rgb(180, 185, 191);
+    background-color:rgb(248, 247, 247);
     position:absolute;
     top: 10px; 
     left: 50px;
     z-index: 1000;
     transition: 0.5s;
 }
+@media screen and (max-width:425px){
+    #search-container{
+    width: 45px;
+    height: 45px;
+}
+}
+
 #search-container .icon{
     position: absolute; 
     transform: translate(50%, 75%);
 }
+@media screen and (max-width:425px){
+    #search-container .icon{
+    transform: translate(12%, 52%);
+}
+}
+
 #search-container .icon .search{
     font-size: 21px;
     cursor: pointer;
@@ -319,6 +343,11 @@ body{
 }
 #search-container.active{
     width: 400px;
+}
+@media screen and (max-width:425px){
+    #search-container.active{
+    width: 300px;
+}
 }
 
 
@@ -332,6 +361,14 @@ body{
     justify-content: center;
     
 }
+@media screen and (max-width:425px){
+    #search-container .input{
+    width: 210px;
+    height: 45px;
+    left: 30px;  
+}
+}
+
 #search-container .input input{
     position: absolute;
     top: 0;
@@ -341,18 +378,36 @@ body{
     background: transparent;
     outline: none;
 }
+
+
 #search-container .input .clear{
     position: absolute;
     right: -5%;
     /* transform: translate(-50%, -50%); */
     cursor: pointer;
     font-size: 20px;
+    color: #444;
 }
+@media screen and (max-width:425px){
+    #search-container .input .clear{
+    transform: translate(100%, 10%);
+}
+}
+
 #search-results{
     /* z-index: 3000; */
     position: absolute;
     cursor: pointer;
+    width: 90%;
+    border-radius: 10px;
+    background-color: rgb(248, 247, 247);
 }
+@media screen and (max-width:425px){
+    #search-results{
+    font-size: small;
+}
+}
+
 
 .overflow-hidden {
     overflow: hidden;
@@ -380,7 +435,6 @@ label {
 }
 
 input {
-  appearance: none;
   border-radius: 50%;
   transition: 0.2s all linear;
   position: relative;

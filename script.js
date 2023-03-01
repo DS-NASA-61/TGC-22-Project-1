@@ -3,7 +3,7 @@ const map = createMap(Singapore);
 let searchResultLayer = L.layerGroup().addTo(map);
 let stallsSearchResultLayer = L.layerGroup().addTo(map);
 
-//define for radio button
+//define radio button value for FSQ API params category
 const coffee = "13032";
 const dessert = "13040";
 const foodAll = "13000";
