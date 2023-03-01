@@ -1,14 +1,16 @@
 body{
     background-color: #121212;
     padding: 0;
-    margin: 0rem;
-    height: 100%;
+    height: 100vh;
 }
 
 
 #landing-page{
     position: absolute;
 } 
+.landing-search-section{
+    padding-right: 10px;
+}
 
 /* landing page background */
 .photo-grid{
@@ -21,6 +23,7 @@ body{
     grid-template-columns: repeat(4,minmax(auto,3fr));
     grid-template-rows: 50vh 50vh;
 }
+
 .card{
     display: flex;
     justify-content: column;
@@ -32,7 +35,7 @@ body{
     /* start / end means start whereever and span two rows and end whereever */
     grid-row: span 2 / auto;
     grid-column: span 2 / auto;
-    height: 100%;
+    height: 100vh;
 }
 .card-small-3{
     grid-column: span 1 / auto;
@@ -52,7 +55,7 @@ body{
         display: none;
     }
 }
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 390px) {
     .card-tall{
         grid-column: span 12;
     }
@@ -248,13 +251,14 @@ body{
     justify-content: center;
 }
 .form {
-	padding: 30px 40px;	
+	padding: 30px 10px;	
 }
 .landing-form-control {
 	margin-bottom: 10px;
 	padding-bottom: 20px;
 	position: relative;
 }
+
 .landing-form-control label {
 	display: inline-block;
 	margin-bottom: 5px;
@@ -269,6 +273,7 @@ body{
 	padding: 10px;
 	width: 100%;
 }
+
 .landing-form-control input:focus {
 	outline: 0;
 	border-color: #777;
@@ -310,14 +315,14 @@ body{
 #search-container{
     width: 60px;
     height: 60px;
-    border-radius: 50px;
+    border-radius: 5px;
     border: 0.12rem solid rgb(180, 185, 191);
-    background-color:rgb(248, 247, 247);
+    background-color:white;
     position:absolute;
     top: 10px; 
-    left: 50px;
+    left: 60px;
     z-index: 1000;
-    transition: 0.5s;
+    transition: 0.2s;
 }
 @media screen and (max-width:425px){
     #search-container{
@@ -332,7 +337,7 @@ body{
 }
 @media screen and (max-width:425px){
     #search-container .icon{
-    transform: translate(12%, 52%);
+    transform: translate(0%, 50%);
 }
 }
 
@@ -390,18 +395,25 @@ body{
 }
 @media screen and (max-width:425px){
     #search-container .input .clear{
-    transform: translate(100%, 10%);
+    transform: translate(110%, 0%);
 }
 }
 
 #search-results{
-    /* z-index: 3000; */
-    position: absolute;
+    position: relative;
     cursor: pointer;
-    width: 90%;
-    border-radius: 10px;
-    background-color: rgb(248, 247, 247);
+    width: 400px;
+    left: -12px;
+    max-height: 120px;
+    overflow-y: auto;
+    border-radius: 3px;
+    font-weight: bold;
+    background-color: rgb(247, 244, 244);
 }
+#search-results .search-results{
+    padding: 3px;
+}
+
 @media screen and (max-width:425px){
     #search-results{
     font-size: small;
@@ -434,7 +446,7 @@ label {
   font-weight:600;
 }
 
-input {
+.form-check-input {
   border-radius: 50%;
   transition: 0.2s all linear;
   position: relative;
@@ -450,3 +462,5 @@ button:active {
   color: black;
   outline: 1px solid black;
 }
+
+

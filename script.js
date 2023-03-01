@@ -422,6 +422,7 @@ searchInput.addEventListener("keyup", async function () {
       document.querySelector("#search-results").appendChild(resultElement);
 
       resultElement.addEventListener("click", function () {
+        searchInput.value = document.querySelector(".search-result").innerHTML;
         searchResultLayer.clearLayers();
         document.querySelector("#search-results").innerHTML = "";
         let marker = L.marker(coordinate, { icon: pinIcon }).addTo(
