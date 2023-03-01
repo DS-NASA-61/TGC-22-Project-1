@@ -374,4 +374,25 @@ body{
 }
 }
 
+label {
+  line-height: 32px;
+  font-weight:600;
+}
 
+input {
+  appearance: none;
+  border-radius: 50%;
+  transition: 0.2s all linear;
+  position: relative;
+  top: 4px;
+}
+
+input:checked {
+  border: 6px solid black;
+}
+
+button:active {
+  background-color: white;
+  color: black;
+  outline: 1px solid black;
+}

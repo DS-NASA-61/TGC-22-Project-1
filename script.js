@@ -3,6 +3,11 @@ const map = createMap(Singapore);
 let searchResultLayer = L.layerGroup().addTo(map);
 let stallsSearchResultLayer = L.layerGroup().addTo(map);
 
+//define for radio button
+const coffee = "13032";
+const dessert = "13040";
+const foodAll = "13000";
+
 let constructionStatus;
 
 //customize GeoJson point markers
@@ -129,29 +134,28 @@ function main() {
       //radio coffee
       const radioBtnCoffee = document.createElement("div");
       radioBtnCoffee.setAttribute("class", "form-check form-check-inline");
-      const radioBtnCoffeeInput = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+      const radioBtnCoffeeInput = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value=${coffee}>
   <label class="form-check-label" for="inlineRadio1">Coffee&Tea</label>`;
       radioBtnCoffee.innerHTML = radioBtnCoffeeInput;
       offcanvasHeader.appendChild(radioBtnCoffee);
       //radio dessert
       const radioBtnDessert = document.createElement("div");
       radioBtnDessert.setAttribute("class", "form-check form-check-inline");
-      const radioBtnDessertInput = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+      const radioBtnDessertInput = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value=${dessert}>
   <label class="form-check-label" for="inlineRadio2">Dessert</label>`;
       radioBtnDessert.innerHTML = radioBtnDessertInput;
       offcanvasHeader.appendChild(radioBtnDessert);
       //radio all food choices
       const radioBtnAll = document.createElement("div");
       radioBtnAll.setAttribute("class", "form-check form-check-inline");
-      const radioBtnAllInput = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+      const radioBtnAllInput = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value=${foodAll}>
   <label class="form-check-label" for="inlineRadio3">All</label>`;
       radioBtnAll.innerHTML = radioBtnAllInput;
       offcanvasHeader.appendChild(radioBtnAll);
 
-      //create "what to eat" button
       const offcanvasBodyButton = document.createElement("button");
-      offcanvasBodyButton.setAttribute("class", "btn btn-success btn-lg");
-      offcanvasBodyButton.innerHTML = "Help me decide what to eat";
+      offcanvasBodyButton.setAttribute("class", "btn btn-success btn-md");
+      offcanvasBodyButton.innerHTML = "Roll";
       offcanvasHeader.appendChild(offcanvasBodyButton);
 
       // Create close button element
@@ -187,8 +191,14 @@ function main() {
           Math.random() * (singaporeBounds.east - singaporeBounds.west) +
           singaporeBounds.west
         ).toFixed(4);
-        // call FSQ API to get random location
-        let data = await loadData(lat, lng);
+        const radioValue = document.querySelector(
+          'input[name="inlineRadioOptions"]:checked'
+        ).value;
+
+        // get value
+
+        // call FSQ API to get random location basis on lat lng and category
+        let data = await loadData(lat, lng, radioValue);
         console.log(data);
         let i = Math.floor(Math.random() * 10);
         let randomChoiceName = data.results[i].name;
