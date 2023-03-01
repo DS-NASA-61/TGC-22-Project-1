@@ -8,17 +8,22 @@ let constructionStatus;
 //customize GeoJson point markers
 const myIcon = L.icon({
   iconUrl: "img/food-stall.png",
-  iconSize: [65, 65], // width and height of the image in pixels
+  iconSize: [55, 55], // width and height of the image in pixels
   shadowSize: [35, 20], // width, height of optional shadow image
   iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
   shadowAnchor: [12, 6], // anchor point of the shadow. should be offset
   popupAnchor: [0, 0], // point from which the popup should open relative to the iconAnchor
 });
+// Add media query for mobile screens
+const mediaQuery = window.matchMedia("(max-width: 320px)");
+if (mediaQuery.matches) {
+  myIcon.options.iconSize = [35, 35];
+}
 
 //customize GeoJson point markers
 const myIconUC = L.icon({
   iconUrl: "img/under-construction.png",
-  iconSize: [65, 65], // width and height of the image in pixels
+  iconSize: [55, 55], // width and height of the image in pixels
   shadowSize: [35, 20], // width, height of optional shadow image
   iconAnchor: [12, 12], // point of the icon which will correspond to marker's location
   shadowAnchor: [12, 6], // anchor point of the shadow. should be offset
@@ -28,7 +33,7 @@ const myIconUC = L.icon({
 //create marker , customize it and add to searchResultLayer
 let pinIcon = L.icon({
   iconUrl: "img/location.png",
-  iconSize: [58, 58], // size of the icon
+  iconSize: [50, 50], // size of the icon
   popupAnchor: [0, -15],
 });
 
@@ -88,6 +93,12 @@ function main() {
       imageEl.setAttribute("src", image);
       imageEl.style.height = "200px";
       imageEl.style.width = "300px";
+      //add media query for mobile screens
+      const mediaQuery = window.matchMedia("(max-width: 425px)");
+      if (mediaQuery.matches) {
+        imageEl.style.height = "auto";
+        imageEl.style.width = "100%";
+      }
 
       //start creating bootstrap offcanvas button
       const stallsButton = document.createElement("button");
@@ -207,7 +218,10 @@ function main() {
       container.append(imageEl, nameEl, statusEl, originEl, stallsButton);
       console.log(container);
 
-      layer.bindPopup(container);
+      layer.bindPopup(container, {
+        minWidth: 100,
+        maxWidth: 300,
+      });
       // layer.bindPopup(feature.properties.Description); this is for testing
     }
 
