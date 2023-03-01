@@ -13,8 +13,8 @@ body{
 /* landing page background */
 .photo-grid{
     position: fixed;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     z-index: 4000;
     display: grid;
     gap: 0rem;
@@ -31,7 +31,8 @@ body{
 .card-tall{
     /* start / end means start whereever and span two rows and end whereever */
     grid-row: span 2 / auto;
-    grid-column: span 2 / auto
+    grid-column: span 2 / auto;
+    height: 100%;
 }
 .card-small-3{
     grid-column: span 1 / auto;
@@ -189,7 +190,7 @@ body{
     cursor: pointer; 
     top:100px;
     left: 95%;
-    top: 90%;
+    top: 90%; 
 }
 @media screen and (max-width:425px) {
     #form-validation{
@@ -319,6 +320,8 @@ body{
 #search-container.active{
     width: 400px;
 }
+
+
 #search-container .input{
     position: relative;
     width: 300px;

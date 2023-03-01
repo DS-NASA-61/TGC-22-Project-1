@@ -125,6 +125,30 @@ function main() {
       offcanvasHeader.style.backgroundColor = "#FFEBB9";
 
       // Create Bootstrap offcanvas title element
+      //create radio button using backticks
+      //radio coffee
+      const radioBtnCoffee = document.createElement("div");
+      radioBtnCoffee.setAttribute("class", "form-check form-check-inline");
+      const radioBtnCoffeeInput = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+  <label class="form-check-label" for="inlineRadio1">Coffee&Tea</label>`;
+      radioBtnCoffee.innerHTML = radioBtnCoffeeInput;
+      offcanvasHeader.appendChild(radioBtnCoffee);
+      //radio dessert
+      const radioBtnDessert = document.createElement("div");
+      radioBtnDessert.setAttribute("class", "form-check form-check-inline");
+      const radioBtnDessertInput = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+  <label class="form-check-label" for="inlineRadio2">Dessert</label>`;
+      radioBtnDessert.innerHTML = radioBtnDessertInput;
+      offcanvasHeader.appendChild(radioBtnDessert);
+      //radio all food choices
+      const radioBtnAll = document.createElement("div");
+      radioBtnAll.setAttribute("class", "form-check form-check-inline");
+      const radioBtnAllInput = `<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+  <label class="form-check-label" for="inlineRadio3">All</label>`;
+      radioBtnAll.innerHTML = radioBtnAllInput;
+      offcanvasHeader.appendChild(radioBtnAll);
+
+      //create "what to eat" button
       const offcanvasBodyButton = document.createElement("button");
       offcanvasBodyButton.setAttribute("class", "btn btn-success btn-lg");
       offcanvasBodyButton.innerHTML = "Help me decide what to eat";
@@ -219,8 +243,7 @@ function main() {
       console.log(container);
 
       layer.bindPopup(container, {
-        minWidth: 100,
-        maxWidth: 300,
+        width: "fit-content",
       });
       // layer.bindPopup(feature.properties.Description); this is for testing
     }
