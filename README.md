@@ -93,7 +93,7 @@ _Gilroy,sans-serif_ is a font family that is modern, minimalist style and versat
 ## Testing
 
 The website is tested for responsiveness using Developer Tools on Chrome browser for mobile, tablet and desktop screen widths.
-The test cases can be found [here](to be added.pdf).
+The test cases can be found [here](https://github.com/DS-NASA-61/TGC-22-Project-1/blob/7067e3543d9561adb9cc8124afa726082abcba13/Test%20Case_Hawker%20Seeker.pdf).
 
 ---
 
