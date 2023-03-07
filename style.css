@@ -422,6 +422,7 @@ body{
 @media screen and (max-width:425px){
     #search-results{
     font-size: small;
+    width: 297px;
 }
 }
 
@@ -439,10 +440,10 @@ body{
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
 
-@media (max-width:767px) {
-    .leaflet-pane .leaflet-marker-icon{
-    width: 30px;
-    height: 30px;
+@media screen and (max-width:767px) {
+    .leaflet-marker-icon{
+    width: 35px !important;
+    height: 35px !important;
 }
 }
 
