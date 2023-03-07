@@ -1,8 +1,8 @@
 # **Hawker Seeker**
 
-![Screenshots of Hawker Seeker homepage](to be added .png)
+![Screenshots of Hawker Seeker homepage](img src="img/Multi Device Website Mockup Generator.png" style="display: block")
 
-Link to demo : [here](https://Hawker-Seeker.netlify.app/)
+Link to demo : [here](https://hawker-seeker.netlify.app/)
 
 ## Summary
 
