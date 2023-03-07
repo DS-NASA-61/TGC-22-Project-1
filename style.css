@@ -74,7 +74,7 @@ body{
 .landing-search-section{
     position: fixed;
     z-index: 5000;
-    top: 30%;
+    top: 20%;
 }
 
 #home-title{
@@ -85,19 +85,19 @@ body{
 }
 @media screen and (max-width:768px){
     #home-title{
-    font-size: 56px;
+    font-size: 50px;
 }
 }
 @media screen and (max-width:375px){
     #home-title{
-    font-size: 36px;
+    font-size: 32px;
     color: #D34E24;
 }
 }
 
 .home-Subtitle1{
     font-family: Gilroy,sans-serif;
-    font-size: 35px;
+    font-size: 30px;
     font-weight: 900;
     color: #FFEBC6;
 }
@@ -114,7 +114,7 @@ body{
 
 .home-Subtitle2{
     font-family: Gilroy,sans-serif;
-    font-size: 45px;
+    font-size: 38px;
     font-weight: 800;
     color: #FFB100
 }
@@ -434,10 +434,10 @@ body{
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
 
-@media screen and (max-width:425px) {
-    .leaflet-marker-icon{
+@media (max-width:767px) {
+    .leaflet-pane .leaflet-marker-icon{
     width: 30px;
-    height: auto;
+    height: 30px;
 }
 }
 

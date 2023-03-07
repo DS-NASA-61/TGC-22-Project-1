@@ -391,7 +391,8 @@ function main() {
 let searchInput = document.querySelector("#search-input");
 let searchBtn = document.querySelector("#search-icon");
 
-searchInput.addEventListener("keyup", async function () {
+//both "input" and "keyup" would work
+searchInput.addEventListener("input", async function () {
   document.querySelector("#search-results").innerHTML = "";
 
   let response = await getAddress(searchInput.value);
@@ -409,9 +410,11 @@ searchInput.addEventListener("keyup", async function () {
   try {
     for (let result of response.results) {
       if (newResult.includes(result.SEARCHVAL)) {
+        console.log("1");
         continue;
       } else {
         newResult.push(result.SEARCHVAL);
+        console.log("2");
       }
 
       let coordinate = [result.LATITUDE, result.LONGITUDE];
