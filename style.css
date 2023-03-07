@@ -74,7 +74,7 @@ body{
 .landing-search-section{
     position: fixed;
     z-index: 5000;
-    top: 20%;
+    top: 15%;
 }
 
 #home-title{
