@@ -79,8 +79,8 @@ body{
 
 #home-title{
     font-family: Gilroy,sans-serif;
-    font-size: 100px;
-    font-weight:800;
+    font-size: 90px;
+    font-weight:700;
     color: #E76F51
 }
 @media screen and (max-width:768px){
@@ -98,7 +98,7 @@ body{
 .home-Subtitle1{
     font-family: Gilroy,sans-serif;
     font-size: 30px;
-    font-weight: 900;
+    font-weight: 800;
     color: #FFEBC6;
 }
 @media screen and (max-width:768px){
@@ -115,7 +115,7 @@ body{
 .home-Subtitle2{
     font-family: Gilroy,sans-serif;
     font-size: 38px;
-    font-weight: 800;
+    font-weight: 700;
     color: #FFB100
 }
 @media screen and (max-width:768px){
@@ -133,7 +133,7 @@ body{
 
 .hero-caption p{
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    margin-top: 20px;
+    margin-top: 15px;
     margin-bottom: 0;
     font-size: 25px;
     font-weight: bold;
@@ -152,7 +152,7 @@ body{
 }
 
 .search-form{
-    font-size: 25px;
+    font-size: 23px;
     width: 100%;
     position: relative;
     background-color: rgba(255, 255, 255, 0.8);
@@ -160,7 +160,7 @@ body{
 }
 .search-form input{
     width: 60%;
-    padding: 0 30px;
+    padding: 0 25px;
     border-radius: 10px;
     border: none;
     font-weight: 300;
