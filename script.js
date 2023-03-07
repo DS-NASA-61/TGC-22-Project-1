@@ -191,11 +191,10 @@ function main() {
           Math.random() * (singaporeBounds.east - singaporeBounds.west) +
           singaporeBounds.west
         ).toFixed(4);
+
         const radioValue = document.querySelector(
           'input[name="inlineRadioOptions"]:checked'
         ).value;
-
-        // get value
 
         // call FSQ API to get random location basis on lat lng and category
         let data = await loadData(lat, lng, radioValue);

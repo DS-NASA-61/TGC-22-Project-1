@@ -19,9 +19,9 @@ Users can see the locations of the Hawker centers as if they were looking down f
 "As a foodie visiting Singapore for the first time, I want to be able to easily find and explore different Hawker centers, so that I can experience the local cuisine and culture."
 With this web app, users can have a complete overview of hawker centers in Singapore and discover hidden gem in lesser-known Hawker centers, save time by quickly locating Hawker centers close to their current location and start exploring the cultural and social aspects of Singapore's Hawker centers, as well as making quick food decision based on the random choice generator feature.
 
-### Structure and Skeleton
+### Structure
 
-![Sitemap](tobe added.jpg)
+[Sitemap]<img src="img/site_structure.png" style="display: block">
 
 #### Fonts
 
