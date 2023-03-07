@@ -1,6 +1,6 @@
 # **Hawker Seeker**
 
-![Screenshots of Hawker Seeker homepage](img src="img/Multi Device Website Mockup Generator.png" style="display: block")
+<img src="img/Multi Device Website Mockup Generator.png" style="display: block">
 
 Link to demo : [here](https://hawker-seeker.netlify.app/)
 
