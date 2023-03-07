@@ -21,7 +21,7 @@ With this web app, users can have a complete overview of hawker centers in Singa
 
 ### Structure
 
-[Sitemap]<img src="img/site_structure.png" style="display: block">
+<img src="img/site_structure.png" style="display: block">
 
 #### Fonts
 
