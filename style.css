@@ -76,6 +76,11 @@ body{
     z-index: 5000;
     top: 15%;
 }
+@media screen and (max-width:768px){
+    .landing-search-section{
+    top: 25%;
+}
+}
 
 #home-title{
     font-family: Gilroy,sans-serif;
