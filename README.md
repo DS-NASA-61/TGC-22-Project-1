@@ -31,6 +31,8 @@ With this web app, users can have a complete overview of hawker centers in Singa
 
 <img src="img/colorpalette.PNG" style="display: block">
 
+The color scheme picked faded orange and brownish based primary colors as it represents nostalgia, warm and grounded feeling Hawker Centers bring about.
+
 #### Fonts
 
 _Gilroy,sans-serif_ is a font family that is modern, minimalist style and versatility make it a popular choice for designers and creatives looking for a clean, contemporary font that can work across a range of applications and media. It fits well with the astethic of the website.
