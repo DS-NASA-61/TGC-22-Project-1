@@ -8,9 +8,6 @@ body{
 #landing-page{
     position: absolute;
 } 
-.landing-search-section{
-    padding-right: 10px;
-}
 
 /* landing page background */
 .photo-grid{
@@ -82,6 +79,7 @@ body{
 /* landing caption and searchbar section */
 .landing-search-section{
     position: fixed;
+    padding-right: 10px;
     z-index: 5000;
     top: 15%;
 }
@@ -89,6 +87,9 @@ body{
     .landing-search-section{
     top: 25%;
 }
+}
+.offset-lg-4{
+    margin-left: 17%
 }
 
 #home-title{
