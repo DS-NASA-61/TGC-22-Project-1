@@ -113,7 +113,7 @@ body{
 
 .home-Subtitle1{
     font-family: Gilroy,sans-serif;
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 800;
     color: #FFEBC6;
     text-shadow: 3px 3px rgb(37, 37, 37);
@@ -131,7 +131,7 @@ body{
 
 .home-Subtitle2{
     font-family: Gilroy,sans-serif;
-    font-size: 38px;
+    font-size: 32px;
     font-weight: 800;
     color: #FFB100;
     text-shadow: 3px 3px rgb(37, 37, 37);
@@ -157,6 +157,7 @@ body{
     font-weight: bold;
     color:lightgray;
     margin-left: 1%;
+    text-shadow: 2px 2px rgb(63, 63, 63);
 }
 @media screen and (max-width:768px){
     .hero-caption p{
